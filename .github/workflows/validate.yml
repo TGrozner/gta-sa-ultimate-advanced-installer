@@ -11,8 +11,7 @@ jobs:
   powershell:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Static validation
         shell: pwsh
         run: ./tests/StaticValidation.ps1
-
