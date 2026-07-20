@@ -10,6 +10,7 @@
 namespace {
 
 constexpr std::uintptr_t kGetHandBrakeAddress = 0x540040;
+constexpr std::uintptr_t kGetLookBehindForCarAddress = 0x53FE70;
 constexpr std::uintptr_t kGameProcessCallAddress = 0x53E981;
 constexpr std::uintptr_t kGetStatValueAddress = 0x558E40;
 constexpr std::uintptr_t kPcSaveHelperAddress = 0xC17034;
@@ -19,6 +20,7 @@ constexpr unsigned short kMissionsPassedStat = 147;
 constexpr int kPlayingGameState = 9;
 
 using HandBrakeFn = short(__attribute__((thiscall)) *)(void*);
+using LookBehindFn = bool(__attribute__((thiscall)) *)(void*);
 using GameProcessFn = void(__attribute__((cdecl)) *)();
 using GetStatValueFn = float(__attribute__((cdecl)) *)(unsigned short);
 using SaveSlotFn = unsigned int(__attribute__((thiscall)) *)(void*, int);
@@ -26,6 +28,7 @@ using XInputGetStateFn = DWORD(WINAPI *)(DWORD, XINPUT_STATE*);
 
 HMODULE g_module = nullptr;
 HandBrakeFn g_originalHandBrake = nullptr;
+LookBehindFn g_originalLookBehind = nullptr;
 GameProcessFn g_originalGameProcess = nullptr;
 XInputGetStateFn g_xinputGetState = nullptr;
 
@@ -36,6 +39,7 @@ char g_markerPath[MAX_PATH]{};
 char g_savePath[MAX_PATH]{};
 
 bool g_controlsEnabled = true;
+bool g_r3LookBehindEnabled = true;
 bool g_autosaveEnabled = true;
 bool g_autosaveOwnsSlot = false;
 bool g_sessionInitialized = false;
@@ -138,7 +142,7 @@ void* ResolveRelativeTarget(const std::uint8_t* address) {
     return const_cast<std::uint8_t*>(address) + 5 + relative;
 }
 
-HandBrakeFn CreateHandBrakeTrampoline(std::uint8_t* target) {
+void* CreateThiscallTrampoline(std::uint8_t* target) {
     constexpr std::size_t copiedLength = 8;
     auto* trampoline = static_cast<std::uint8_t*>(VirtualAlloc(
         nullptr,
@@ -155,7 +159,7 @@ HandBrakeFn CreateHandBrakeTrampoline(std::uint8_t* target) {
         VirtualFree(trampoline, 0, MEM_RELEASE);
         return nullptr;
     }
-    return reinterpret_cast<HandBrakeFn>(trampoline);
+    return trampoline;
 }
 
 void ResolveXInput() {
@@ -191,6 +195,12 @@ short __attribute__((fastcall)) HandBrakeHook(void* pad, void*) {
         return g_originalHandBrake != nullptr ? g_originalHandBrake(pad) : 0;
     }
 
+    short disabledControls = 0;
+    std::memcpy(&disabledControls, static_cast<const std::uint8_t*>(pad) + 0x10E, sizeof(disabledControls));
+    if (disabledControls != 0) {
+        return 0;
+    }
+
     // Keep the keyboard handbrake available even when a controller is connected.
     const auto* bytes = static_cast<const std::uint8_t*>(pad);
     short keyboardHandBrake = 0;
@@ -205,6 +215,27 @@ short __attribute__((fastcall)) HandBrakeHook(void* pad, void*) {
         return 0;
     }
     return (buttons & XINPUT_GAMEPAD_RIGHT_SHOULDER) != 0 ? 255 : 0;
+}
+
+bool __attribute__((fastcall)) LookBehindForCarHook(void* pad, void*) {
+    if (!g_controlsEnabled || !g_r3LookBehindEnabled || g_xinputGetState == nullptr || pad == nullptr) {
+        return g_originalLookBehind != nullptr && g_originalLookBehind(pad);
+    }
+
+    XINPUT_STATE state{};
+    if (g_xinputGetState(0, &state) != ERROR_SUCCESS) {
+        return g_originalLookBehind != nullptr && g_originalLookBehind(pad);
+    }
+
+    short disabledControls = 0;
+    std::memcpy(&disabledControls, static_cast<const std::uint8_t*>(pad) + 0x10E, sizeof(disabledControls));
+    if (disabledControls != 0) {
+        return false;
+    }
+
+    // With an active controller, R3 exclusively owns vehicle rear view. This
+    // prevents the old LB+RB combination from fighting the drive-by controls.
+    return (state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) != 0;
 }
 
 bool MarkerClaimsConfiguredSlot() {
@@ -340,7 +371,7 @@ bool InstallHandBrakeHook() {
         g_originalHandBrake = reinterpret_cast<HandBrakeFn>(ResolveRelativeTarget(target));
         patchLength = 5;
     } else if (std::memcmp(target, expectedPrefix, sizeof(expectedPrefix)) == 0) {
-        g_originalHandBrake = CreateHandBrakeTrampoline(target);
+        g_originalHandBrake = reinterpret_cast<HandBrakeFn>(CreateThiscallTrampoline(target));
         patchLength = sizeof(expectedPrefix);
     } else {
         Log("ERROR controls hook=get-handbrake outcome=skipped reason=unexpected-bytes");
@@ -352,6 +383,30 @@ bool InstallHandBrakeHook() {
         return false;
     }
     Log("INFO controls hook=get-handbrake outcome=installed");
+    return true;
+}
+
+bool InstallLookBehindHook() {
+    auto* target = reinterpret_cast<std::uint8_t*>(kGetLookBehindForCarAddress);
+    constexpr std::uint8_t expectedPrefix[8] = { 0x66, 0x83, 0xB9, 0x0E, 0x01, 0x00, 0x00, 0x00 };
+
+    std::size_t patchLength = 0;
+    if (target[0] == 0xE9) {
+        g_originalLookBehind = reinterpret_cast<LookBehindFn>(ResolveRelativeTarget(target));
+        patchLength = 5;
+    } else if (std::memcmp(target, expectedPrefix, sizeof(expectedPrefix)) == 0) {
+        g_originalLookBehind = reinterpret_cast<LookBehindFn>(CreateThiscallTrampoline(target));
+        patchLength = sizeof(expectedPrefix);
+    } else {
+        Log("ERROR controls hook=look-behind-for-car outcome=skipped reason=unexpected-bytes");
+        return false;
+    }
+
+    if (g_originalLookBehind == nullptr || !PatchRelativeBranch(target, reinterpret_cast<void*>(&LookBehindForCarHook), patchLength, 0xE9)) {
+        Log("ERROR controls hook=look-behind-for-car outcome=failed");
+        return false;
+    }
+    Log("INFO controls hook=look-behind-for-car binding=R3 outcome=installed");
     return true;
 }
 
@@ -379,6 +434,7 @@ DWORD WINAPI Initialize(void*) {
     AppendPath(iniPath, sizeof(iniPath), "\\GTAVEssentials.ini");
 
     g_controlsEnabled = GetPrivateProfileIntA("Controls", "Enabled", 1, iniPath) != 0;
+    g_r3LookBehindEnabled = GetPrivateProfileIntA("Controls", "R3LookBehind", 1, iniPath) != 0;
     g_autosaveEnabled = GetPrivateProfileIntA("Autosave", "Enabled", 1, iniPath) != 0;
     g_autosaveSlot = GetPrivateProfileIntA("Autosave", "Slot", 7, iniPath);
     g_autosaveDelayMs = static_cast<DWORD>(GetPrivateProfileIntA("Autosave", "DelayMs", 5000, iniPath));
@@ -395,11 +451,12 @@ DWORD WINAPI Initialize(void*) {
     ConfigureAutosaveProtection(saveDirectory);
     ResolveXInput();
 
-    const bool controlsInstalled = !g_controlsEnabled || InstallHandBrakeHook();
+    const bool handBrakeInstalled = !g_controlsEnabled || InstallHandBrakeHook();
+    const bool lookBehindInstalled = !g_controlsEnabled || !g_r3LookBehindEnabled || InstallLookBehindHook();
     const bool autosaveInstalled = !g_autosaveEnabled || InstallGameProcessHook();
     Log(
         "INFO component=GTAVEssentials controls=%s autosave=%s slot=%d outcome=ready",
-        controlsInstalled ? "ready" : "failed",
+        handBrakeInstalled && lookBehindInstalled ? "ready" : "failed",
         autosaveInstalled ? "ready" : "failed",
         g_autosaveSlot
     );

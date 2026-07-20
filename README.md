@@ -79,7 +79,7 @@ Press **F8** at any time to terminate a frozen `gta_sa.exe` process.
 ## Important controls
 
 - on foot: `LT` aims, `RT` fires, `A` sprints, `X` jumps, `B` reloads/melees and `Y` enters;
-- vehicles: `RT` accelerates, `LT` brakes/reverses and `RB` is the handbrake;
+- vehicles: `RT` accelerates, `LT` brakes/reverses, `RB` is the handbrake and `R3` looks behind;
 - controller drive-by: hold `LB`, aim freely with the right stick and press `RB` to shoot;
 - keyboard/mouse drive-by: right mouse button aims;
 - type `MDRRELOAD` during gameplay after editing drive-by settings;
