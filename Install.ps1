@@ -72,9 +72,14 @@ $settings = @(
     @{ Path = 'modloader\_CORE - SaveLoader 2.7 Userfiles\III.VC.SA.SaveLoader.ini'; Section = 'MAIN'; Key = 'SkipIntro'; Value = '1' },
     @{ Path = 'modloader\_CORE - SaveLoader 2.7 Userfiles\III.VC.SA.SaveLoader.ini'; Section = 'MAIN'; Key = 'CustomUserFilesDirectoryInGameDir'; Value = 'userfiles' },
     @{ Path = 'modloader\_CORE - GInput\GInputSA.ini'; Section = 'Pad1'; Key = 'ControlsSet'; Value = '2' },
+    @{ Path = 'modloader\_CORE - GInput\GInputSA.ini'; Section = 'Pad2'; Key = 'ControlsSet'; Value = '2' },
     @{ Path = 'modloader\Controls - Manual DriveBy Refixed\cleo\DrivebySettings.ini'; Section = 'MAIN'; Key = 'DrivebyControlType'; Value = '5' },
     @{ Path = 'modloader\Controls - Manual DriveBy Refixed\cleo\DrivebySettings.ini'; Section = 'MAIN'; Key = 'DrivebyAimButton'; Value = 'RMB' },
+    @{ Path = 'modloader\Controls - Manual DriveBy Refixed\cleo\DrivebySettings.ini'; Section = 'MAIN'; Key = 'NoDrivingWhileAiming'; Value = '0' },
+    @{ Path = 'modloader\Controls - Manual DriveBy Refixed\cleo\DrivebySettings.ini'; Section = 'MAIN'; Key = 'FreeLineOfSight'; Value = '1' },
+    @{ Path = 'modloader\Controls - Manual DriveBy Refixed\cleo\DrivebySettings.ini'; Section = 'MAIN'; Key = 'NoAngleLimit'; Value = '1' },
     @{ Path = 'modloader\Controls - Manual DriveBy Refixed\cleo\DrivebySettings.ini'; Section = 'EXCEPTIONS'; Key = 'DisableOnMission'; Value = '0' },
+    @{ Path = 'modloader\modloader.ini'; Section = 'Profiles.Advanced2026.Priority'; Key = 'Gameplay - GTA V Essentials'; Value = '95' },
     @{ Path = 'modloader\_CORE - Framerate Vigilante\FramerateVigilante.ini'; Section = 'Settings'; Key = 'FPSlimit'; Value = '60' },
     @{ Path = 'modloader\_CORE - Framerate Vigilante\FramerateVigilante.ini'; Section = 'Settings'; Key = 'RefreshRate'; Value = '60' },
     @{ Path = 'modloader\_CORE - Framerate Vigilante\FramerateVigilante.ini'; Section = 'Settings'; Key = 'AutoLimitFPS'; Value = '1' },
@@ -105,4 +110,3 @@ foreach ($setting in $settings) {
     ConfiguredSettings = $configuredFiles
     BackupRoot = if (Test-Path -LiteralPath $backupRoot) { $backupRoot } else { $null }
 }
-

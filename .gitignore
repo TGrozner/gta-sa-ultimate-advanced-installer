@@ -1,5 +1,7 @@
 packages/**
 !packages/.gitkeep
+!packages/gtav-essentials/
+!packages/gtav-essentials/**
 downloads/**
 !downloads/.gitkeep
 *.zip

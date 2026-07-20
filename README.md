@@ -13,7 +13,8 @@ new-game loading after a cold restart.
 - lists every original mod source and expected module;
 - prepares a package workspace with the correct target folders;
 - installs package overlays into a legal GTA SA copy with a timestamped backup;
-- applies the validated 60 FPS, GInput and GTA V-style drive-by settings;
+- applies the validated 60 FPS and complete GTA V-style Xbox control profile;
+- installs a protected automatic save five seconds after successful missions;
 - installs a global F8 emergency kill switch and launcher;
 - detects missing modules, duplicate renderers and known crash combinations.
 
@@ -77,11 +78,24 @@ Press **F8** at any time to terminate a frozen `gta_sa.exe` process.
 
 ## Important controls
 
-- controller drive-by: GInput layout 2, `LB` aims and `RB` shoots;
+- on foot: `LT` aims, `RT` fires, `A` sprints, `X` jumps, `B` reloads/melees and `Y` enters;
+- vehicles: `RT` accelerates, `LT` brakes/reverses and `RB` is the handbrake;
+- controller drive-by: hold `LB`, aim freely with the right stick and press `RB` to shoot;
 - keyboard/mouse drive-by: right mouse button aims;
 - type `MDRRELOAD` during gameplay after editing drive-by settings;
 - SkyGfx preset 1 uses PS2 building and vehicle pipelines;
 - engine frame limit: 60 FPS.
+
+## Autosave
+
+`GTA V Essentials` saves automatically to slot 7 five seconds after a mission
+is completed. Slot 8 is left alone because SaveLoader can reserve it for GTASnP
+uploads. If slot 7 already contains a save that the module did not create,
+autosave disables itself instead of overwriting it. Diagnostics are written to
+`modloader\Gameplay - GTA V Essentials\GTAVEssentials.log`.
+
+The bundled ASI is built from the MIT-licensed source in
+`native\GTAVEssentials`; no third-party binary is embedded in that package.
 
 ## Package preparation
 

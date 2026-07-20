@@ -32,5 +32,23 @@ $trackedCandidates = Get-ChildItem -LiteralPath $root -Recurse -File |
 $tooLarge = $trackedCandidates | Where-Object Length -gt 5MB
 if ($tooLarge) { throw "Unexpected large repository file: $($tooLarge.FullName -join ', ')" }
 
-Write-Host "Static validation passed: $($mods.packages.Count) sources, $($profile.requiredModules.Count) required modules." -ForegroundColor Green
+$essentialsRoot = Join-Path $root 'packages\gtav-essentials\overlay\modloader\Gameplay - GTA V Essentials'
+$essentialsBinary = Join-Path $essentialsRoot 'GTAVEssentials.asi'
+$essentialsSource = Join-Path $root 'native\GTAVEssentials\GTAVEssentials.cpp'
+if (-not (Test-Path -LiteralPath $essentialsBinary -PathType Leaf)) {
+    throw 'Bundled GTAVEssentials.asi is missing.'
+}
+if (-not (Test-Path -LiteralPath $essentialsSource -PathType Leaf)) {
+    throw 'GTAVEssentials source is missing.'
+}
+$binaryBytes = [System.IO.File]::ReadAllBytes($essentialsBinary)
+if ($binaryBytes.Length -lt 1024 -or $binaryBytes[0] -ne 0x4D -or $binaryBytes[1] -ne 0x5A) {
+    throw 'Bundled GTAVEssentials.asi is not a valid PE binary.'
+}
+$essentialsPackage = $mods.packages | Where-Object id -eq 'gtav-essentials'
+$essentialsHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $essentialsBinary).Hash
+if ($null -eq $essentialsPackage -or $essentialsHash -ne $essentialsPackage.bundledSha256) {
+    throw "Bundled GTAVEssentials.asi hash mismatch: $essentialsHash"
+}
 
+Write-Host "Static validation passed: $($mods.packages.Count) sources, $($profile.requiredModules.Count) required modules." -ForegroundColor Green

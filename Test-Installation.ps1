@@ -51,8 +51,15 @@ foreach ($file in $profile.forbiddenRootFiles) {
 
 $expectedSettings = @(
     @{ Path = 'modloader\_CORE - GInput\GInputSA.ini'; Section = 'Pad1'; Key = 'ControlsSet'; Value = '2' },
+    @{ Path = 'modloader\_CORE - GInput\GInputSA.ini'; Section = 'Pad2'; Key = 'ControlsSet'; Value = '2' },
     @{ Path = 'modloader\Controls - Manual DriveBy Refixed\cleo\DrivebySettings.ini'; Section = 'MAIN'; Key = 'DrivebyControlType'; Value = '5' },
+    @{ Path = 'modloader\Controls - Manual DriveBy Refixed\cleo\DrivebySettings.ini'; Section = 'MAIN'; Key = 'NoDrivingWhileAiming'; Value = '0' },
+    @{ Path = 'modloader\Controls - Manual DriveBy Refixed\cleo\DrivebySettings.ini'; Section = 'MAIN'; Key = 'FreeLineOfSight'; Value = '1' },
+    @{ Path = 'modloader\Controls - Manual DriveBy Refixed\cleo\DrivebySettings.ini'; Section = 'MAIN'; Key = 'NoAngleLimit'; Value = '1' },
     @{ Path = 'modloader\Controls - Manual DriveBy Refixed\cleo\DrivebySettings.ini'; Section = 'EXCEPTIONS'; Key = 'DisableOnMission'; Value = '0' },
+    @{ Path = 'modloader\Gameplay - GTA V Essentials\GTAVEssentials.ini'; Section = 'Controls'; Key = 'Enabled'; Value = '1' },
+    @{ Path = 'modloader\Gameplay - GTA V Essentials\GTAVEssentials.ini'; Section = 'Autosave'; Key = 'Slot'; Value = '7' },
+    @{ Path = 'modloader\modloader.ini'; Section = 'Profiles.Advanced2026.Priority'; Key = 'Gameplay - GTA V Essentials'; Value = '95' },
     @{ Path = 'modloader\_CORE - Framerate Vigilante\FramerateVigilante.ini'; Section = 'Settings'; Key = 'FPSlimit'; Value = '60' },
     @{ Path = 'modloader\Graphics - SkyGfx 4.2b\skygfx1.ini'; Section = 'SkyGfx'; Key = 'buildingPipe'; Value = 'PS2' }
 )

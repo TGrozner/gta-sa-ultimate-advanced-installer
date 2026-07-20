@@ -28,6 +28,7 @@
     { "id": "save-loader", "name": "SaveLoader", "version": "2.7", "sourceUrl": "https://github.com/ThirteenAG/III.VC.SA.SaveLoader/releases/tag/v2.7", "targetModules": ["_CORE - SaveLoader 2.7 Userfiles"] },
     { "id": "repair-gta", "name": "RepairGTA", "version": "Build 5", "sourceUrl": "https://www.mixmods.com.br/2022/10/repair-gta/", "targetModules": ["_CORE - RepairGTA Build 5"] },
     { "id": "project-props", "name": "Project Props", "version": "4.2", "sourceUrl": "https://github.com/user-grinch/Project-Props/releases/tag/4.2", "targetModules": ["World - Buildings Upgrade", "World - Project Props Procobj Override"] },
-    { "id": "community-aggregate", "name": "Presentation and gameplay aggregate", "version": "validated collection", "sourceUrl": "https://www.mixmods.com.br/", "targetModules": ["Mega - MixSets", "Mega - PedFuncs", "Mega - Real Traffic Fix", "Mega - Air Traffic", "Mega - More Radar Icons", "UI - Atmosphere Interface"] }
+    { "id": "community-aggregate", "name": "Presentation and gameplay aggregate", "version": "validated collection", "sourceUrl": "https://www.mixmods.com.br/", "targetModules": ["Mega - MixSets", "Mega - PedFuncs", "Mega - Real Traffic Fix", "Mega - Air Traffic", "Mega - More Radar Icons", "UI - Atmosphere Interface"] },
+    { "id": "gtav-essentials", "name": "GTA V Essentials", "version": "1.0.0", "sourceUrl": "https://github.com/TGrozner/gta-sa-ultimate-advanced-installer/tree/main/native/GTAVEssentials", "targetModules": ["Gameplay - GTA V Essentials"], "bundledSha256": "1AF07CD6AE133CCEC6033DD9853D690C2E3D18203EDE8211D91B4C6B51796C1A", "notes": "Repository-owned open-source ASI: contextual RB handbrake plus protected post-mission autosave." }
   ]
 }
