@@ -1,0 +1,12 @@
+packages/**
+!packages/.gitkeep
+downloads/**
+!downloads/.gitkeep
+*.zip
+*.rar
+*.7z
+*.log
+_installer-backups/
+.tmp/
+.DS_Store
+Thumbs.db
