@@ -117,7 +117,7 @@ $tokens = $null
 $errors = $null
 foreach ($script in Get-ChildItem -LiteralPath $root -Recurse -File -Filter '*.ps1') {
     [void][System.Management.Automation.Language.Parser]::ParseFile($script.FullName, [ref]$tokens, [ref]$errors)
-    if ($errors.Count -gt 0) { throw "PowerShell parse failure in $($script.FullName): $($errors[0].Message)" }
+    if (@($errors).Count -gt 0) { throw "PowerShell parse failure in $($script.FullName): $($errors[0].Message)" }
 }
 $tooLarge = Get-ChildItem -LiteralPath $root -Recurse -File |
     Where-Object { $_.FullName -notmatch '[\\/]\.git[\\/]' -and $_.Length -gt 5MB }
