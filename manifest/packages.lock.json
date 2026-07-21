@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedAtUtc": "2026-07-21T00:00:00.0000000+00:00",
-  "manifestSha256": "575E4BB5902FF8214CBE7814970F6B4C300AE38819281D26CF7647EA446DA6E9",
+  "manifestSha256": "1356B40C5F80BFC775F6DB58090C66AED9EC9237F7FF14A64D6CA952A48E92D2",
   "packages": [
     {
       "id": "gtav-essentials",
@@ -9,8 +9,8 @@
       "files": [
         {
           "path": "modloader/Gameplay - GTA V Essentials/GTAVEssentials.asi",
-          "length": 58880,
-          "sha256": "8C1B17241734572A33C05202F48BBE7639C04C4DF81F01468BC4B94D460B0E3B"
+          "length": 49152,
+          "sha256": "425610982C8668B8FC2CC034D81355918A7625360A1960396EF78E5312FE873F"
         },
         {
           "path": "modloader/Gameplay - GTA V Essentials/GTAVEssentials.ini",

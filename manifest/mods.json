@@ -438,7 +438,7 @@
       "sourceKind": "bundled-source",
       "license": "MIT",
       "targetModules": ["Gameplay - GTA V Essentials"],
-      "bundledSha256": "8C1B17241734572A33C05202F48BBE7639C04C4DF81F01468BC4B94D460B0E3B",
+      "bundledSha256": "425610982C8668B8FC2CC034D81355918A7625360A1960396EF78E5312FE873F",
       "notes": "Repository-owned open-source ASI with GTA V-style controls and frame-limiter compatibility."
     }
   ]
