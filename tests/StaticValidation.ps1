@@ -53,6 +53,7 @@ $requiredAutosaveGuards = @(
     'kPad0DisableControlsAddress',
     'kSelectedSaveGameAddress',
     'kSaveBypassAddress',
+    'kRuntimeAutosaveSupported',
     'kFrameLimiterEnabledAddress',
     'g_autosaveSafeWindowMs',
     'FindLatestSafehouseLocation',

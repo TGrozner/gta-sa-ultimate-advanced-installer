@@ -88,19 +88,14 @@ Press **F8** at any time to terminate a frozen `gta_sa.exe` process.
 - engine frame limiter is kept enabled at 60 FPS, which preserves gym, swimming,
   driving-school and physics behavior.
 
-## Autosave
+## Saves
 
-`GTA V Essentials` schedules an automatic save to slot 7 five seconds after a
-mission is completed. It then waits until the mission thread and cutscene have
-fully ended, CJ is on foot, no gang war is running, the menu is closed and
-player controls have stayed available for ten continuous seconds. A completed
-autosave is validated before it replaces the previous slot, and its resume
-location is copied from the most recently used manual safehouse save. The
-matching CLEO state is saved with slot 7 as well. Slot
-8 is left alone because SaveLoader can reserve it for GTASnP uploads. If slot 7
-already contains a save that the module did not create, autosave disables itself
-instead of overwriting it. Diagnostics are written to `modloader\Gameplay - GTA
-V Essentials\GTAVEssentials.log`, with a fallback log in the game root.
+Runtime autosave is intentionally disabled. Calling the game's internal save
+routine outside the native safehouse flow can crash after long missions, even
+when the resulting file passes structural validation. Use the normal safehouse
+save menu; slot 8 remains reserved for SaveLoader/GTASnP. Runtime diagnostics
+are written to `modloader\Gameplay - GTA V Essentials\GTAVEssentials.log`, with
+a fallback log in the game root.
 
 The bundled ASI is built from the MIT-licensed source in
 `native\GTAVEssentials`; no third-party binary is embedded in that package.

@@ -34,6 +34,7 @@ constexpr std::uintptr_t kPad0DisableControlsAddress = 0xB73566;
 constexpr std::uintptr_t kSaveBypassAddress = 0x61907A;
 constexpr unsigned short kMissionsPassedStat = 147;
 constexpr int kPlayingGameState = 9;
+constexpr bool kRuntimeAutosaveSupported = false;
 constexpr DWORD kSaveFileSize = 202752;
 constexpr std::size_t kSaveBlockCount = 34;
 constexpr std::size_t kPlayerPedSize = 548;
@@ -978,7 +979,8 @@ DWORD WINAPI Initialize(void*) {
     g_controlsEnabled = GetPrivateProfileIntA("Controls", "Enabled", 1, iniPath) != 0;
     g_r3LookBehindEnabled = GetPrivateProfileIntA("Controls", "R3LookBehind", 1, iniPath) != 0;
     g_forceFrameLimiterEnabled = GetPrivateProfileIntA("Compatibility", "ForceFrameLimiter", 1, iniPath) != 0;
-    g_autosaveEnabled = GetPrivateProfileIntA("Autosave", "Enabled", 1, iniPath) != 0;
+    const bool autosaveRequested = GetPrivateProfileIntA("Autosave", "Enabled", 0, iniPath) != 0;
+    g_autosaveEnabled = autosaveRequested && kRuntimeAutosaveSupported;
     g_autosaveSlot = GetPrivateProfileIntA("Autosave", "Slot", 7, iniPath);
     g_autosaveDelayMs = static_cast<DWORD>(GetPrivateProfileIntA("Autosave", "DelayMs", 5000, iniPath));
     g_autosaveSafeWindowMs = static_cast<DWORD>(GetPrivateProfileIntA("Autosave", "SafeWindowMs", 10000, iniPath));
@@ -995,7 +997,11 @@ DWORD WINAPI Initialize(void*) {
 
     char saveDirectory[MAX_PATH]{};
     GetPrivateProfileStringA("Autosave", "SaveDirectory", "userfiles", saveDirectory, MAX_PATH, iniPath);
-    ConfigureAutosaveProtection(saveDirectory);
+    if (g_autosaveEnabled) {
+        ConfigureAutosaveProtection(saveDirectory);
+    } else if (autosaveRequested) {
+        Log("WARN autosave outcome=disabled reason=unsafe-runtime-save-path");
+    }
     ResolveXInput();
 
     const bool handBrakeInstalled = !g_controlsEnabled || InstallHandBrakeHook();
@@ -1017,7 +1023,7 @@ DWORD WINAPI Initialize(void*) {
     Log(
         "INFO component=GTAVEssentials controls=%s autosave=%s frame_limiter=%s slot=%d outcome=ready",
         handBrakeInstalled && brakeInstalled && lookLeftInstalled && lookRightInstalled && lookBehindInstalled ? "ready" : "failed",
-        gameProcessInstalled ? "ready" : "failed",
+        g_autosaveEnabled ? (gameProcessInstalled ? "ready" : "failed") : "disabled",
         g_forceFrameLimiterEnabled ? "forced-on" : "user-controlled",
         g_autosaveSlot
     );

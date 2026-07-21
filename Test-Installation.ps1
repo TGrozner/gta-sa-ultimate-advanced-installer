@@ -60,6 +60,7 @@ $expectedSettings = @(
     @{ Path = 'modloader\Gameplay - GTA V Essentials\GTAVEssentials.ini'; Section = 'Controls'; Key = 'Enabled'; Value = '1' },
     @{ Path = 'modloader\Gameplay - GTA V Essentials\GTAVEssentials.ini'; Section = 'Controls'; Key = 'R3LookBehind'; Value = '1' },
     @{ Path = 'modloader\Gameplay - GTA V Essentials\GTAVEssentials.ini'; Section = 'Compatibility'; Key = 'ForceFrameLimiter'; Value = '1' },
+    @{ Path = 'modloader\Gameplay - GTA V Essentials\GTAVEssentials.ini'; Section = 'Autosave'; Key = 'Enabled'; Value = '0' },
     @{ Path = 'modloader\Gameplay - GTA V Essentials\GTAVEssentials.ini'; Section = 'Autosave'; Key = 'Slot'; Value = '7' },
     @{ Path = 'modloader\Gameplay - GTA V Essentials\GTAVEssentials.ini'; Section = 'Autosave'; Key = 'SafeWindowMs'; Value = '10000' },
     @{ Path = 'modloader\modloader.ini'; Section = 'Profiles.Advanced2026.Priority'; Key = 'Gameplay - GTA V Essentials'; Value = '95' },
