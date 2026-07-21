@@ -1,49 +1,51 @@
 # GTA SA Ultimate Advanced — installer recipe
 
-A reproducible Windows installer recipe for the validated **GTA SA Ultimate
-Advanced 2026** profile. The target is a heavily modernized GTA San Andreas
-Classic build that still loads saves and starts new games reliably.
+This repository builds a reproducible, auditable mod profile for a legal copy
+of GTA San Andreas Classic PC. It records each upstream source, locks the exact
+files prepared locally, installs them transactionally, validates the result,
+and can restore every overwritten file byte-for-byte.
 
-The validated renderer is **SkyGfx 4.2b + SkyGrad**. Proper Shaders 05-26 is
-intentionally excluded because it caused intermittent freezes during save and
-new-game loading after a cold restart.
+The stable renderer path is **SkyGfx 4.2b + SkyGrad**. Proper Shaders, ImVehFt,
+duplicate texture packs, duplicate vehicle textures and competing audio packs
+are excluded from the default profile because they overlap or destabilize this
+stack.
 
-## What this repository does
+## Safety model
 
-- lists every original mod source and expected module;
-- prepares a package workspace with the correct target folders;
-- installs package overlays into a legal GTA SA copy with a timestamped backup;
-- applies the validated 60 FPS and complete GTA V-style Xbox control profile;
-- installs a protected automatic save five seconds after successful missions;
-- installs a global F8 emergency kill switch and launcher;
-- detects missing modules, duplicate renderers and known crash combinations.
+- GTA SA and third-party mod archives are never redistributed.
+- The installer accepts only overlays recorded in `manifest/packages.lock.json`.
+- Every locked file is checked by path, size and SHA-256 before installation.
+- Different packages may not write different bytes to the same path unless an
+  explicit winner is declared in the profile.
+- All destination files are backed up before the first mutation. A failure
+  triggers an automatic rollback.
+- A completed transaction has an immutable backup and a JSON receipt under
+  `<game>\_installer-transactions\<transaction-id>`.
+- Restore refuses to overwrite files changed since installation unless you
+  explicitly use `-Force`.
+- The bundled ASI refuses to hook anything except the supported GTA SA 1.0 US
+  executable hash.
 
-It does **not** redistribute GTA SA or third-party mod assets. Read
-[DISCLAIMER.md](DISCLAIMER.md) before publishing packages or releases.
+Read [DISCLAIMER.md](DISCLAIMER.md) before sharing any package or build.
 
 ## Requirements
 
 - Windows 10 or 11;
-- PowerShell 7 (`pwsh`) recommended, Windows PowerShell 5.1 supported;
-- a legal GTA San Andreas Classic PC installation;
-- approximately 40 GB free for the game, downloaded archives and backups;
-- GTA SA 1.0 US executable expected by the validated profile.
+- PowerShell 7 recommended; Windows PowerShell 5.1 supported;
+- a legal, clean GTA San Andreas Classic PC installation;
+- GTA SA 1.0 US with the SHA-256 listed in `manifest/profile.json`;
+- enough free space for the game, archives and transaction backups.
 
-## Quick start
-
-Open PowerShell in the cloned repository:
+## 1. Prepare the sources
 
 ```powershell
 .\Get-ModSources.ps1 -Prepare
 ```
 
-For every created package directory, download the mod from `SOURCE.url` and
-extract its installable files under `overlay`. The content of `overlay` is
-always relative to the game root. Example:
-
-```powershell
-.\Get-ModSources.ps1 -Id skygfx,proper-fixes -OpenManualPages
-```
+Each generated `packages\<id>` directory contains the original source URL,
+version, license notes and expected destination. Download from that source,
+review the archive, then place only the installable files under `overlay`,
+relative to the game root:
 
 ```text
 packages/
@@ -55,79 +57,102 @@ packages/
           skygfx1.ini
 ```
 
-Preview the installation without writing:
+Manual source pages can be opened explicitly:
+
+```powershell
+.\Get-ModSources.ps1 -Id skygfx,proper-fixes -OpenManualPages
+```
+
+RoSA and Proper Fixes have restrictive redistribution terms. Keep their files
+local and never commit them or attach them to a release.
+
+## 2. Lock the reviewed overlays
+
+After checking every archive and its placement:
+
+```powershell
+.\Lock-Packages.ps1
+git diff -- manifest/packages.lock.json
+```
+
+The lock is the trust boundary. Do not regenerate it merely to silence a hash
+error: first verify why the prepared archive changed.
+
+## 3. Preview and install
+
+The default installer requires the whole stable profile. It does not perform a
+partial “best effort” installation.
 
 ```powershell
 .\Install.ps1 -GamePath "C:\Games\GTA San Andreas" -WhatIf
-```
-
-Install available overlays and apply the validated configuration:
-
-```powershell
 .\Install.ps1 -GamePath "C:\Games\GTA San Andreas"
 ```
 
-Verify and launch:
+`-AllowIncompleteProfile` exists only for package development and automated
+tests. It is not a validated gameplay configuration.
+
+## 4. Verify and launch
 
 ```powershell
 .\Test-Installation.ps1 -GamePath "C:\Games\GTA San Andreas"
 .\Launch-GTA.ps1 -GamePath "C:\Games\GTA San Andreas"
 ```
 
-Press **F8** at any time to terminate a frozen `gta_sa.exe` process.
+The verifier checks actual file content, non-empty modules, active Mod Loader
+profile, priority rules, forbidden wrappers and the final hashes stored in the
+latest transaction receipt.
 
-## Important controls
+Launch through the supplied script to enable the F8 emergency stop. The watcher
+is tied to the exact PID and executable path started by that launcher; pressing
+F8 cannot terminate an unrelated `gta_sa.exe` instance.
 
-- on foot: `LT` aims, `RT` fires, `A` sprints, `X` jumps, `B` reloads/melees and `Y` enters;
-- vehicles: `RT` accelerates, `LT` brakes/reverses, `RB` is the handbrake (including the motorcycle rear brake) and `R3` looks behind;
-- controller drive-by: hold `LB`, aim freely with the right stick and press `RB` to shoot; GInput's
-  lateral `LB`/`RB` camera bindings are disabled so those buttons remain dedicated to aiming and firing;
-- keyboard/mouse drive-by: right mouse button aims;
-- type `MDRRELOAD` during gameplay after editing drive-by settings;
-- SkyGfx preset 1 uses PS2 building and vehicle pipelines;
-- engine frame limiter is kept enabled at 60 FPS, which preserves gym, swimming,
-  driving-school and physics behavior.
+## Restore an installation
 
-## Saves
+Restore the newest completed transaction:
 
-Runtime autosave is intentionally disabled. Calling the game's internal save
-routine outside the native safehouse flow can crash after long missions, even
-when the resulting file passes structural validation. Use the normal safehouse
-save menu; slot 8 remains reserved for SaveLoader/GTASnP. Runtime diagnostics
-are written to `modloader\Gameplay - GTA V Essentials\GTAVEssentials.log`, with
-a fallback log in the game root.
-
-The bundled ASI is built from the MIT-licensed source in
-`native\GTAVEssentials`; no third-party binary is embedded in that package.
-
-## Package preparation
-
-`Get-ModSources.ps1 -Prepare` creates one folder per manifest entry. GitHub is
-used only for this installer repository; third-party archives stay ignored by
-Git and must not be pushed.
-
-The installer copies only overlays that exist. It reports absent packages, then
-the verifier tells you exactly which modules are still missing. This makes it
-possible to build the profile in several passes without losing existing work.
-
-## Safety and rollback
-
-Before overwriting a file, the installer saves the old version under:
-
-```text
-<game>\_installer-backups\yyyyMMdd-HHmmss\
+```powershell
+.\Restore-Installation.ps1 -GamePath "C:\Games\GTA San Andreas"
 ```
 
-The installer refuses to run while GTA is open. It never deletes game files.
-Use `-WhatIf` to inspect every planned operation.
+Or select a receipt explicitly:
 
-## Validated exclusions
+```powershell
+.\Restore-Installation.ps1 -GamePath "C:\Games\GTA San Andreas" -TransactionId "20260721-120000-000-ab12cd34"
+```
 
-- Proper Shaders 05-26: intermittent loading freeze;
-- ImVehFt 2.1.1: reproducible startup crash `0xc0000417`;
-- Wheel Detach: overlaps the selected vehicle stack;
-- DXVK, ENB, ReShade and RenderHook: not part of the validated profile;
-- duplicate handling files and duplicate limit adjusters.
+Backups are retained after restoration so the receipt remains auditable. Empty
+directories created by installed packages may remain, but installed files are
+removed and replaced files are restored byte-for-byte.
 
-See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) when a loading bar stops before
-completion or a renderer warning appears.
+## Selected profile
+
+The required core contains the loader stack, CLEO/CLEO+, limit and streaming
+fixes, SkyGfx/SkyGrad/Project2DFX, RoSA 1.5, Proper Fixes 2.1.1, the selected
+gameplay and audio fixes, SaveLoader, RepairGTA and the repository-owned GTA V
+Essentials plugin. Proper Fixes has a higher Mod Loader priority than RoSA;
+Project Props overrides only the companion Buildings Upgrade module.
+
+Ragdoll, RVP, Enterable Hidden Interiors, TruckTrailer, French localization and
+4K loadscreens are optional and produce verifier warnings when enabled. Their
+reasons and dependencies are recorded in `manifest/profile.json`.
+
+Explicit exclusions include:
+
+- Proper Shaders 05-26, ImVehFt and Wheel Detach;
+- AI Upscaled Weapon Textures, Original Peds Vary and Proper Vehicles Retex,
+  which duplicate selected RoSA content;
+- Uncompressed SFX, which overlaps the selected Soundize stack;
+- root DXVK, ENB, ReShade and RenderHook wrappers.
+
+## Controls and saves
+
+- GInput control set 2 remains the base controller layout.
+- Vehicle `RB` is the handbrake/rear motorcycle brake; `R3` looks behind.
+- Hold `LB` and press `RB` for the selected drive-by controls.
+- Framerate Vigilante targets 60 FPS while GTA's engine limiter remains on.
+- GTA V Essentials does not hook or emulate saving. Use normal safehouse saves;
+  slot 8 remains reserved for SaveLoader/GTASnP.
+
+Runtime diagnostics are written beside `GTAVEssentials.asi`, with a fallback
+log in the game root. See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for recovery
+steps.

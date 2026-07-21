@@ -8,7 +8,7 @@ downloads/**
 *.rar
 *.7z
 *.log
-_installer-backups/
+_installer-transactions/
 .tmp/
 .DS_Store
 Thumbs.db
