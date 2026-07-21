@@ -1,0 +1,8 @@
+* text=auto eol=lf
+*.asi binary
+*.dll binary
+*.exe binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.zip binary
