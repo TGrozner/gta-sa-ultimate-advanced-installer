@@ -25,7 +25,7 @@ if ($Id) {
 }
 
 foreach ($package in $selectedPackages) {
-    $packagePath = Join-Path $packageRootFull $package.id
+    $packagePath = Assert-ChildPath -Parent $packageRootFull -Child (Join-Path $packageRootFull $package.id)
     $overlayPath = Join-Path $packagePath 'overlay'
 
     if ($Prepare) {
@@ -37,11 +37,28 @@ foreach ($package in $selectedPackages) {
             $package.name
             "Version: $($package.version)"
             "Source: $($package.sourceUrl)"
+            "License: $($package.license)"
             ''
             'Extract installable files under overlay, preserving paths relative to the GTA SA game root.'
+            'Follow the package notes and remove bundled duplicate dependencies before locking.'
+            'Run .\Lock-Packages.ps1 after every overlay change. The installer rejects unlocked files.'
             'Never commit downloaded archives or third-party assets to this repository.'
         )
+        if ($package.PSObject.Properties.Name -contains 'notes') {
+            $instructions += @('', "Notes: $($package.notes)")
+        }
         [System.IO.File]::WriteAllLines((Join-Path $packagePath 'README.txt'), $instructions, [System.Text.UTF8Encoding]::new($false))
+
+        $packageMetadata = [ordered]@{
+            id = $package.id
+            name = $package.name
+            version = $package.version
+            sourceUrl = $package.sourceUrl
+            license = $package.license
+            targetModules = @($package.targetModules)
+            rootFiles = if ($package.PSObject.Properties.Name -contains 'rootFiles') { @($package.rootFiles) } else { @() }
+        }
+        Write-JsonFile -Path (Join-Path $packagePath 'PACKAGE.json') -Value $packageMetadata
     }
 
     [pscustomobject]@{

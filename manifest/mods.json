@@ -1,34 +1,445 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "packageLockPolicy": "Every prepared overlay must be listed in packages.lock.json with a SHA-256 for every file.",
   "packages": [
-    { "id": "silentpatch", "name": "SilentPatchSA", "version": "1.1 build 33.1", "sourceUrl": "https://github.com/CookiePLMonster/SilentPatch/releases", "targetModules": ["_CORE - SilentPatch"] },
-    { "id": "asi-loader", "name": "Ultimate ASI Loader", "version": "9.4.0", "sourceUrl": "https://github.com/ThirteenAG/Ultimate-ASI-Loader/releases", "targetModules": [], "notes": "Use the vorbisFile.dll loading method; dinput8.dll is excluded by this profile." },
-    { "id": "modloader", "name": "Mod Loader", "version": "0.3.9", "sourceUrl": "https://github.com/thelink2012/modloader/releases", "targetModules": [] },
-    { "id": "widescreen-fix", "name": "Widescreen Fix", "version": "validated official release", "sourceUrl": "https://github.com/ThirteenAG/WidescreenFixesPack/releases", "targetModules": ["_CORE - Widescreen Fix"] },
-    { "id": "open-limit-adjuster", "name": "Open Limit Adjuster", "version": "1.7.0", "sourceUrl": "https://github.com/ThirteenAG/III.VC.SA.LimitAdjuster/releases", "targetModules": ["_CORE - Open Limit Adjuster"] },
-    { "id": "improved-streaming", "name": "Improved Streaming", "version": "1.1", "sourceUrl": "https://www.mixmods.com.br/2026/02/improved-streaming/", "targetModules": ["_CORE - Improved Streaming"] },
-    { "id": "ginput", "name": "GInput", "version": "1.11", "sourceUrl": "https://github.com/CookiePLMonster/GInput/releases", "targetModules": ["_CORE - GInput"] },
-    { "id": "skygfx", "name": "SkyGfx", "version": "4.2b", "sourceUrl": "https://github.com/aap/skygfx/releases", "targetModules": ["Graphics - SkyGfx 4.2b"] },
-    { "id": "project2dfx", "name": "Project2DFX", "version": "validated official release", "sourceUrl": "https://github.com/ThirteenAG/III.VC.SA.IV.Project2DFX/releases", "targetModules": ["Graphics - Project2DFX"] },
-    { "id": "proper-fixes", "name": "Proper Fixes", "version": "2026 RoSA-compatible", "sourceUrl": "https://www.mixmods.com.br/2026/06/sa-proper-fixes/", "targetModules": ["Fixes - Proper Fixes 2026"] },
-    { "id": "rosa", "name": "RoSA Evolved modular", "version": "1.4 modular", "sourceUrl": "https://www.mixmods.com.br/2023/07/rosa-project-evolved-remaster-texturas-hd/", "targetModules": ["Graphics - RoSA Core HD", "Graphics - RoSA Cutscenes HD", "Graphics - RoSA Interiors HD"] },
-    { "id": "vehdeform", "name": "VehDeform", "version": "1.3c", "sourceUrl": "https://zzpumazone.blogspot.com/2025/06/vehdeform-10-dynamic-vehicle-deformation.html", "targetModules": ["Vehicles - VehDeform 1.3c"] },
-    { "id": "v-to-sa-handling", "name": "V to SA Handling", "version": "current historic package", "sourceUrl": "https://www.mixmods.com.br/2014/02/v-to-sa-handling/", "targetModules": ["Handling V to SA"] },
-    { "id": "advanced-aiming", "name": "Advanced Aiming Mod", "version": "1.3", "sourceUrl": "https://github.com/DK22Pac/advanced-aiming-mod/releases/tag/1.3", "targetModules": ["Controls - Advanced Aiming 1.3"] },
-    { "id": "gps-redux", "name": "GPS Redux", "version": "1.5.1", "sourceUrl": "https://github.com/juicermv/GTA-GPS-Redux/releases/tag/1.5.1", "targetModules": ["UI - GPS Redux 1.5.1"] },
-    { "id": "manual-driveby", "name": "Manual DriveBy Refixed", "version": "26.06.02", "sourceUrl": "https://libertycity.net/files/gta-san-andreas/213857-manual-driveby-refixed.html", "targetModules": ["Controls - Manual DriveBy Refixed"] },
-    { "id": "ragdoll", "name": "Ragdoll Bullet Physics + Fix", "version": "validated fixed package", "sourceUrl": "https://www.mixmods.com.br/2021/09/mod-ragdoll-bullet-physics-fix-fisica-realista/", "targetModules": ["Mega - Ragdoll Bullet Physics"] },
-    { "id": "helifix", "name": "HeliFix", "version": "1.5", "sourceUrl": "https://github.com/user-grinch/HeliFixSA/releases/tag/1.5", "targetModules": ["Fixes - HeliFix 1.5"] },
-    { "id": "soundize", "name": "Soundize", "version": "01-26 public", "sourceUrl": "https://www.mixmods.com.br/2026/03/soundize/", "targetModules": ["Soundize", "Soundize Ambient Sounds"] },
-    { "id": "improvedmove", "name": "ImprovedMove", "version": "0.2.2", "sourceUrl": "https://www.mixmods.com.br/2021/08/improvedmove/", "targetModules": ["Gameplay - ImprovedMove 0.2.2"] },
-    { "id": "pedskills", "name": "PedSkills", "version": "2.2 AI", "sourceUrl": "https://www.mixmods.com.br/2022/08/pedskills/", "targetModules": ["Gameplay - PedSkills 2.2 AI"] },
-    { "id": "rvp", "name": "Revamped Vehicles Project", "version": "author build", "sourceUrl": "https://kiloryumods.my.canva.site/revampedvehiclesproject", "targetModules": ["Vehicles - RVP author build"] },
-    { "id": "vehfuncs-gsx", "name": "VehFuncs + GSX", "version": "2.5.3", "sourceUrl": "https://www.mixmods.com.br/2025/12/sa-vehfuncs/", "targetModules": ["Vehicles - VehFuncs 2.5.3 + GSX"] },
-    { "id": "enterable-interiors", "name": "Enterable Hidden Interiors Repatched", "version": "26.04.02", "sourceUrl": "https://www.mixmods.com.br/", "targetModules": ["World - Enterable Hidden Interiors 26.04.02 Raw"] },
-    { "id": "save-loader", "name": "SaveLoader", "version": "2.7", "sourceUrl": "https://github.com/ThirteenAG/III.VC.SA.SaveLoader/releases/tag/v2.7", "targetModules": ["_CORE - SaveLoader 2.7 Userfiles"] },
-    { "id": "repair-gta", "name": "RepairGTA", "version": "Build 5", "sourceUrl": "https://www.mixmods.com.br/2022/10/repair-gta/", "targetModules": ["_CORE - RepairGTA Build 5"] },
-    { "id": "project-props", "name": "Project Props", "version": "4.2", "sourceUrl": "https://github.com/user-grinch/Project-Props/releases/tag/4.2", "targetModules": ["World - Buildings Upgrade", "World - Project Props Procobj Override"] },
-    { "id": "community-aggregate", "name": "Presentation and gameplay aggregate", "version": "validated collection", "sourceUrl": "https://www.mixmods.com.br/", "targetModules": ["Mega - MixSets", "Mega - PedFuncs", "Mega - Real Traffic Fix", "Mega - Air Traffic", "Mega - More Radar Icons", "UI - Atmosphere Interface"] },
-    { "id": "gtav-essentials", "name": "GTA V Essentials", "version": "1.3.1", "sourceUrl": "https://github.com/TGrozner/gta-sa-ultimate-advanced-installer/tree/main/native/GTAVEssentials", "targetModules": ["Gameplay - GTA V Essentials"], "bundledSha256": "8C1B17241734572A33C05202F48BBE7639C04C4DF81F01468BC4B94D460B0E3B", "notes": "Repository-owned open-source ASI: contextual RB handbrake with motorcycle rear-brake support, dedicated LB/RB drive-by controls, R3 vehicle rear view, runtime autosave hard-disabled and enforced 60 FPS compatibility." }
+    {
+      "id": "silentpatch",
+      "name": "SilentPatchSA",
+      "version": "1.1 build 33.1",
+      "sourceUrl": "https://github.com/CookiePLMonster/SilentPatch/releases/tag/1.1-BUILD33.1-SA",
+      "sourceKind": "manual",
+      "license": "MIT",
+      "targetModules": ["_CORE - SilentPatch"]
+    },
+    {
+      "id": "asi-loader",
+      "name": "Ultimate ASI Loader",
+      "version": "9.7.1",
+      "sourceUrl": "https://github.com/ThirteenAG/Ultimate-ASI-Loader/releases/tag/v9.7.1",
+      "sourceKind": "manual",
+      "license": "MIT",
+      "targetModules": [],
+      "rootFiles": ["vorbisFile.dll"],
+      "notes": "Use the x86 vorbisFile.dll build. Do not add dinput8.dll or another proxy wrapper."
+    },
+    {
+      "id": "cleo",
+      "name": "CLEO 4",
+      "version": "4.4.4",
+      "sourceUrl": "https://github.com/cleolibrary/CLEO4/releases",
+      "sourceKind": "manual",
+      "license": "LGPL-3.0-or-later",
+      "targetModules": [],
+      "rootFiles": ["CLEO.asi", "bass.dll"],
+      "notes": "Keep CLEO.asi and bass.dll only. The profile's ASI loader owns vorbisFile.dll."
+    },
+    {
+      "id": "cleo-plus",
+      "name": "CLEO+",
+      "version": "overlay-locked",
+      "sourceUrl": "https://www.mixmods.com.br/2022/03/cleoplus/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": [],
+      "rootFiles": ["CLEO/CLEO+.cleo"]
+    },
+    {
+      "id": "new-opcodes",
+      "name": "NewOpcodes",
+      "version": "overlay-locked",
+      "sourceUrl": "https://github.com/cleolibrary/NewOpcodes",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": [],
+      "rootFiles": ["CLEO/NewOpcodes.cleo"]
+    },
+    {
+      "id": "modloader",
+      "name": "Mod Loader",
+      "version": "0.3.9",
+      "sourceUrl": "https://github.com/thelink2012/modloader/releases/tag/v0.3.9",
+      "sourceKind": "manual",
+      "license": "MIT",
+      "targetModules": [],
+      "rootFiles": ["modloader.asi"]
+    },
+    {
+      "id": "widescreen-fix",
+      "name": "Widescreen Fix",
+      "version": "overlay-locked",
+      "sourceUrl": "https://github.com/ThirteenAG/WidescreenFixesPack/releases",
+      "sourceKind": "manual",
+      "license": "MIT",
+      "targetModules": ["_CORE - Widescreen Fix"]
+    },
+    {
+      "id": "open-limit-adjuster",
+      "name": "Open Limit Adjuster",
+      "version": "1.7.0",
+      "sourceUrl": "https://github.com/GTAmodding/III.VC.SA.LimitAdjuster/releases/tag/v1.7.0",
+      "sourceKind": "manual",
+      "license": "MIT",
+      "targetModules": ["_CORE - Open Limit Adjuster"]
+    },
+    {
+      "id": "framerate-vigilante",
+      "name": "Framerate Vigilante",
+      "version": "23",
+      "sourceUrl": "https://www.mixmods.com.br/2022/08/iii-vc-sa-framerate-vigilante/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["_CORE - Framerate Vigilante"]
+    },
+    {
+      "id": "improved-streaming",
+      "name": "Improved Streaming",
+      "version": "1.1-2026-07-17",
+      "sourceUrl": "https://www.mixmods.com.br/2026/07/improved-streaming/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["_CORE - Improved Streaming"],
+      "notes": "Use the RoSA preset and lock the selected INI because the upstream package is rolling."
+    },
+    {
+      "id": "ginput",
+      "name": "GInput",
+      "version": "1.11",
+      "sourceUrl": "https://github.com/CookiePLMonster/GInput/releases",
+      "sourceKind": "manual",
+      "license": "MIT",
+      "targetModules": ["_CORE - GInput"]
+    },
+    {
+      "id": "skygfx",
+      "name": "SkyGfx",
+      "version": "4.2b",
+      "sourceUrl": "https://github.com/aap/skygfx/releases/tag/v4.2b",
+      "sourceKind": "manual",
+      "license": "MIT",
+      "targetModules": ["Graphics - SkyGfx 4.2b"]
+    },
+    {
+      "id": "skygrad",
+      "name": "SkyGrad",
+      "version": "2015-06-05",
+      "sourceUrl": "https://www.mixmods.com.br/2020/01/skygrad-sky-gradient-fix-corrigir-linhas-no-ceu/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Mega - SkyGrad"]
+    },
+    {
+      "id": "project2dfx",
+      "name": "Project2DFX",
+      "version": "overlay-locked",
+      "sourceUrl": "https://github.com/ThirteenAG/III.VC.SA.IV.Project2DFX/releases",
+      "sourceKind": "manual",
+      "license": "MIT",
+      "targetModules": ["Graphics - Project2DFX"],
+      "notes": "Remove the bundled limit adjuster; this profile owns a separate OLA package."
+    },
+    {
+      "id": "proper-fixes",
+      "name": "Proper Fixes for RoSA",
+      "version": "2.1.1-2026-07-16",
+      "sourceUrl": "https://www.mixmods.com.br/2026/06/sa-proper-fixes/",
+      "sourceKind": "manual",
+      "license": "upstream-no-reupload",
+      "targetModules": ["Fixes - Proper Fixes 2026"],
+      "notes": "Use only the package explicitly labelled for RoSA Evolved."
+    },
+    {
+      "id": "rosa",
+      "name": "RoSA Evolved modular",
+      "version": "1.5-public-overlay-locked",
+      "sourceUrl": "https://www.mixmods.com.br/2023/07/rosa-project-evolved-remaster-texturas-hd/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Graphics - RoSA Core HD", "Graphics - RoSA Cutscenes HD", "Graphics - RoSA Interiors HD"],
+      "notes": "The public archive rolls monthly; packages.lock.json is the authoritative build identity."
+    },
+    {
+      "id": "vehdeform",
+      "name": "VehDeform",
+      "version": "1.3c",
+      "sourceUrl": "https://zzpumazone.blogspot.com/2025/06/vehdeform-10-dynamic-vehicle-deformation.html",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Vehicles - VehDeform 1.3c"]
+    },
+    {
+      "id": "v-to-sa-handling",
+      "name": "V to SA Handling",
+      "version": "2014-overlay-locked",
+      "sourceUrl": "https://www.mixmods.com.br/2014/02/v-to-sa-handling/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Handling V to SA"]
+    },
+    {
+      "id": "advanced-aiming",
+      "name": "Advanced Aiming Mod",
+      "version": "1.3",
+      "sourceUrl": "https://github.com/DK22Pac/advanced-aiming-mod/releases/tag/1.3",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Controls - Advanced Aiming 1.3"]
+    },
+    {
+      "id": "gps-redux",
+      "name": "GPS Redux",
+      "version": "1.5.1",
+      "sourceUrl": "https://github.com/juicermv/GTA-GPS-Redux/releases/tag/1.5.1",
+      "sourceKind": "manual",
+      "license": "MIT",
+      "targetModules": ["UI - GPS Redux 1.5.1"]
+    },
+    {
+      "id": "manual-driveby",
+      "name": "Manual DriveBy Refixed",
+      "version": "26.06.02",
+      "sourceUrl": "https://libertycity.net/files/gta-san-andreas/213857-manual-driveby-refixed.html",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Controls - Manual DriveBy Refixed"]
+    },
+    {
+      "id": "ragdoll",
+      "name": "Ragdoll Bullet Physics + Fix",
+      "version": "2021-fixed-overlay-locked",
+      "sourceUrl": "https://www.mixmods.com.br/2021/09/mod-ragdoll-bullet-physics-fix-fisica-realista/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Mega - Ragdoll Bullet Physics"]
+    },
+    {
+      "id": "helifix",
+      "name": "HeliFix",
+      "version": "1.5",
+      "sourceUrl": "https://github.com/user-grinch/HeliFixSA/releases/tag/1.5",
+      "sourceKind": "manual",
+      "license": "MIT",
+      "targetModules": ["Fixes - HeliFix 1.5"]
+    },
+    {
+      "id": "soundize",
+      "name": "Soundize",
+      "version": "2026-03-overlay-locked",
+      "sourceUrl": "https://www.mixmods.com.br/2026/03/soundize/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Soundize", "Soundize Ambient Sounds"]
+    },
+    {
+      "id": "improvedmove",
+      "name": "ImprovedMove",
+      "version": "0.2.2",
+      "sourceUrl": "https://www.mixmods.com.br/2021/08/improvedmove/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Gameplay - ImprovedMove 0.2.2"]
+    },
+    {
+      "id": "pedskills",
+      "name": "PedSkills",
+      "version": "2.2 AI",
+      "sourceUrl": "https://www.mixmods.com.br/2022/08/pedskills/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Gameplay - PedSkills 2.2 AI"]
+    },
+    {
+      "id": "police-reactions",
+      "name": "Police Reaction to Player's Weapon",
+      "version": "1.2",
+      "sourceUrl": "https://libertycity.net/files/gta-san-andreas/194070-police-reaction-to-players-weapon.html",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Gameplay - Police Reactions 2026"]
+    },
+    {
+      "id": "reload-mod",
+      "name": "Reload Mod Fixed",
+      "version": "2025-10-05",
+      "sourceUrl": "https://www.mixmods.com.br/2019/07/reload-mod-by-junior_djjr-recarregar-armas/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Gameplay - Reload Mod Fixed"]
+    },
+    {
+      "id": "faster-clothes",
+      "name": "Faster Clothes Changes",
+      "version": "2020-08-22",
+      "sourceUrl": "https://www.mixmods.com.br/2020/08/faster-clothes-changes-trocar-de-roupa-rapidamente/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Mega - Faster Clothes Change"]
+    },
+    {
+      "id": "mobile-font",
+      "name": "Mobile Font Fixed",
+      "version": "2019-overlay-locked",
+      "sourceUrl": "https://www.mixmods.com.br/2019/12/mobile-font-fixed-fonte-do-gta-sa-mobile-corrigida/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Mega - Mobile Font Fixed"]
+    },
+    {
+      "id": "peds-dont-drown",
+      "name": "Peds Don't Drown Fix",
+      "version": "2021-05-11",
+      "sourceUrl": "https://gamemodding.com/en/gta-san-andreas/others/87828-peds-dont-drown-fix.html",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Mega - Peds Dont Drown"]
+    },
+    {
+      "id": "rvp",
+      "name": "Revamped Vehicles Project",
+      "version": "author-rolling-overlay-locked",
+      "sourceUrl": "https://kiloryumods.my.canva.site/revampedvehiclesproject",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Vehicles - RVP author build"],
+      "notes": "Optional: the official page normally expects ImVehFt, which this stability profile forbids."
+    },
+    {
+      "id": "vehfuncs-gsx",
+      "name": "VehFuncs + GSX",
+      "version": "2.5.3-2026-03-02",
+      "sourceUrl": "https://www.mixmods.com.br/2025/12/sa-vehfuncs/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Vehicles - VehFuncs 2.5.3 + GSX"]
+    },
+    {
+      "id": "enterable-interiors",
+      "name": "Enterable Hidden Interiors + Fix",
+      "version": "4.3-unofficial-fix",
+      "sourceUrl": "https://www.mixmods.com.br/2021/01/enterable-hidden-interiors-entrar-em-interiores-escondidos/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["World - Enterable Hidden Interiors 26.04.02 Raw"],
+      "notes": "Optional and recommended only after story completion. Requires CLEO+ and NewOpcodes."
+    },
+    {
+      "id": "save-loader",
+      "name": "SaveLoader",
+      "version": "2.7",
+      "sourceUrl": "https://github.com/ThirteenAG/III.VC.SA.SaveLoader/releases/tag/v2.7",
+      "sourceKind": "manual",
+      "license": "MIT",
+      "targetModules": ["_CORE - SaveLoader 2.7 Userfiles"]
+    },
+    {
+      "id": "repair-gta",
+      "name": "RepairGTA",
+      "version": "Build 5",
+      "sourceUrl": "https://www.mixmods.com.br/2022/10/repair-gta/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["_CORE - RepairGTA Build 5"]
+    },
+    {
+      "id": "project-props",
+      "name": "Project Props",
+      "version": "4.2",
+      "sourceUrl": "https://github.com/user-grinch/Project-Props/releases/tag/4.2",
+      "sourceKind": "manual",
+      "license": "MIT",
+      "targetModules": ["World - Buildings Upgrade", "World - Project Props Procobj Override"]
+    },
+    {
+      "id": "mixsets",
+      "name": "MixSets",
+      "version": "4.3.4-overlay-locked",
+      "sourceUrl": "https://www.mixmods.com.br/2022/03/sa-mixsets/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Mega - MixSets"]
+    },
+    {
+      "id": "pedfuncs",
+      "name": "PedFuncs",
+      "version": "0.5.1",
+      "sourceUrl": "https://www.mixmods.com.br/2022/07/pedfuncs/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Mega - PedFuncs"]
+    },
+    {
+      "id": "real-traffic-fix",
+      "name": "Real Traffic Fix",
+      "version": "2.2.1-beta",
+      "sourceUrl": "https://www.mixmods.com.br/2022/04/real-traffic-fix/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Mega - Real Traffic Fix"]
+    },
+    {
+      "id": "air-traffic",
+      "name": "Air Traffic Pro",
+      "version": "6.0",
+      "sourceUrl": "https://gamemodding.com/en/gta-san-andreas/cleo-scripts/50750-air-traffic-pro-60.html",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Mega - Air Traffic"]
+    },
+    {
+      "id": "more-radar-icons",
+      "name": "More Radar Icons",
+      "version": "2.0",
+      "sourceUrl": "https://www.mixmods.com.br/2022/01/more-radar-icons/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Mega - More Radar Icons"]
+    },
+    {
+      "id": "atmosphere-interface",
+      "name": "Atmosphere Interface Pack",
+      "version": "2021-overlay-locked",
+      "sourceUrl": "https://www.mixmods.com.br/2021/01/atmosphere-interface-pack-interface-hd/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["UI - Atmosphere Interface"],
+      "notes": "Remove the optional HQ Radar files; Proper Fixes owns radar.txd."
+    },
+    {
+      "id": "french-language",
+      "name": "MultiLanguages Project +11 (French)",
+      "version": "2017-overlay-locked",
+      "sourceUrl": "https://www.gtainside.com/en/sanandreas/other/107412-multilanguages-project-11/",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["UI - French Official"]
+    },
+    {
+      "id": "loadscreens-4k",
+      "name": "Loadscreens 4K Definitive",
+      "version": "1.1",
+      "sourceUrl": "https://www.mixmods.com.br/2021/12/loadscreens-4k-definitive-artworks-widescreen-hd/",
+      "sourceKind": "manual",
+      "license": "upstream-attribution-required",
+      "targetModules": ["UI - Loadscreens 4K"]
+    },
+    {
+      "id": "truck-trailer",
+      "name": "Trucks with Trailers",
+      "version": "2025-10-19",
+      "sourceUrl": "https://www.gtainside.com/en/sanandreas/mods/212043-trucks-with-trailers",
+      "sourceKind": "manual",
+      "license": "upstream-custom",
+      "targetModules": ["Mega - TruckTrailer"]
+    },
+    {
+      "id": "gtav-essentials",
+      "name": "GTA V Essentials",
+      "version": "1.4.0",
+      "sourceUrl": "https://github.com/TGrozner/gta-sa-ultimate-advanced-installer/tree/main/native/GTAVEssentials",
+      "sourceKind": "bundled-source",
+      "license": "MIT",
+      "targetModules": ["Gameplay - GTA V Essentials"],
+      "bundledSha256": "425610982C8668B8FC2CC034D81355918A7625360A1960396EF78E5312FE873F",
+      "notes": "Repository-owned open-source ASI with GTA V-style controls and frame-limiter compatibility."
+    }
   ]
 }

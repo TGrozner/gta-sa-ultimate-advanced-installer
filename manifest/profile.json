@@ -1,11 +1,14 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "profile": "Ultimate Advanced 2026",
+  "modLoaderProfile": "Advanced2026",
   "supportedExecutableHashes": [
     "B1BAE961837F9828FB1920369390A116F5FA6BA82C547CD1DA8F2C495967ADCD"
   ],
-  "requiredRootFiles": [
+  "requiredFiles": [
     "CLEO.asi",
+    "bass.dll",
+    "CLEO/CLEO+.cleo",
     "modloader.asi",
     "vorbisFile.dll"
   ],
@@ -33,33 +36,127 @@
     "Graphics - RoSA Interiors HD",
     "Graphics - SkyGfx 4.2b",
     "Handling V to SA",
-    "Mega - AI Upscaled Weapon Textures and Icons",
     "Mega - Air Traffic",
     "Mega - Faster Clothes Change",
     "Mega - MixSets",
     "Mega - Mobile Font Fixed",
     "Mega - More Radar Icons",
-    "Mega - Original Peds Vary",
     "Mega - PedFuncs",
     "Mega - Peds Dont Drown",
-    "Mega - Proper Vehicles Retex",
-    "Mega - Ragdoll Bullet Physics",
     "Mega - Real Traffic Fix",
     "Mega - SkyGrad",
-    "Mega - TruckTrailer",
-    "Mega - Uncompressed SFX Pack",
     "Soundize",
     "Soundize Ambient Sounds",
     "UI - Atmosphere Interface",
-    "UI - French Official",
     "UI - GPS Redux 1.5.1",
-    "UI - Loadscreens 4K",
-    "Vehicles - RVP author build",
     "Vehicles - VehDeform 1.3c",
     "Vehicles - VehFuncs 2.5.3 + GSX",
     "World - Buildings Upgrade",
-    "World - Enterable Hidden Interiors 26.04.02 Raw",
     "World - Project Props Procobj Override"
+  ],
+  "optionalModules": [
+    {
+      "name": "Mega - Ragdoll Bullet Physics",
+      "packageId": "ragdoll",
+      "reason": "Physics hook; enable only after an in-game stability pass."
+    },
+    {
+      "name": "Vehicles - RVP author build",
+      "packageId": "rvp",
+      "reason": "The upstream build normally expects ImVehFt, which this profile excludes."
+    },
+    {
+      "name": "World - Enterable Hidden Interiors 26.04.02 Raw",
+      "packageId": "enterable-interiors",
+      "reason": "Upstream recommends installing after story completion.",
+      "requiredFiles": ["CLEO/NewOpcodes.cleo"]
+    },
+    {
+      "name": "Mega - TruckTrailer",
+      "packageId": "truck-trailer",
+      "reason": "Gameplay extra with no role in the stable core."
+    },
+    {
+      "name": "UI - French Official",
+      "packageId": "french-language",
+      "reason": "Locale choice; do not force it on every installation."
+    },
+    {
+      "name": "UI - Loadscreens 4K",
+      "packageId": "loadscreens-4k",
+      "reason": "Cosmetic package and redistribution-sensitive artwork."
+    }
+  ],
+  "excludedModules": [
+    {
+      "name": "Mega - AI Upscaled Weapon Textures and Icons",
+      "reason": "Superseded by the Proper Retex content already included in RoSA Evolved 1.5."
+    },
+    {
+      "name": "Mega - Original Peds Vary",
+      "reason": "Conflicts with RoSA's included pedestrian textures."
+    },
+    {
+      "name": "Mega - Proper Vehicles Retex",
+      "reason": "Already included in RoSA Evolved 1.5."
+    },
+    {
+      "name": "Mega - Uncompressed SFX Pack",
+      "reason": "Overlaps the selected Soundize audio stack."
+    }
+  ],
+  "modulePriorities": {
+    "Graphics - RoSA Core HD": 49,
+    "Graphics - RoSA Cutscenes HD": 49,
+    "Graphics - RoSA Interiors HD": 49,
+    "Fixes - Proper Fixes 2026": 51,
+    "Mega - Mobile Font Fixed": 52,
+    "UI - Atmosphere Interface": 52,
+    "Vehicles - VehDeform 1.3c": 52,
+    "Handling V to SA": 52,
+    "Vehicles - RVP author build": 53,
+    "World - Enterable Hidden Interiors 26.04.02 Raw": 53,
+    "_CORE - Improved Streaming": 54,
+    "Mega - More Radar Icons": 54,
+    "UI - Loadscreens 4K": 54,
+    "World - Buildings Upgrade": 54,
+    "World - Project Props Procobj Override": 55,
+    "Controls - Manual DriveBy Refixed": 70,
+    "Gameplay - GTA V Essentials": 95
+  },
+  "compatibilityRules": [
+    {
+      "id": "proper-fixes-over-rosa",
+      "higherPriorityModule": "Fixes - Proper Fixes 2026",
+      "lowerPriorityModules": ["Graphics - RoSA Core HD", "Graphics - RoSA Cutscenes HD", "Graphics - RoSA Interiors HD"]
+    },
+    {
+      "id": "project-props-over-buildings",
+      "higherPriorityModule": "World - Project Props Procobj Override",
+      "lowerPriorityModules": ["World - Buildings Upgrade"]
+    }
+  ],
+  "configuration": [
+    { "path": "modloader/modloader.ini", "section": "Folder.Config", "key": "Profile", "value": "Advanced2026", "required": true },
+    { "path": "modloader/_CORE - SaveLoader 2.7 Userfiles/III.VC.SA.SaveLoader.ini", "section": "MAIN", "key": "LoadSlot", "value": "-1", "required": true },
+    { "path": "modloader/_CORE - SaveLoader 2.7 Userfiles/III.VC.SA.SaveLoader.ini", "section": "MAIN", "key": "SkipIntro", "value": "1", "required": true },
+    { "path": "modloader/_CORE - SaveLoader 2.7 Userfiles/III.VC.SA.SaveLoader.ini", "section": "MAIN", "key": "CustomUserFilesDirectoryInGameDir", "value": "userfiles", "required": true },
+    { "path": "modloader/_CORE - GInput/GInputSA.ini", "section": "Pad1", "key": "ControlsSet", "value": "2", "required": true },
+    { "path": "modloader/_CORE - GInput/GInputSA.ini", "section": "Pad2", "key": "ControlsSet", "value": "2", "required": true },
+    { "path": "modloader/Controls - Manual DriveBy Refixed/cleo/DrivebySettings.ini", "section": "MAIN", "key": "DrivebyControlType", "value": "5", "required": true },
+    { "path": "modloader/Controls - Manual DriveBy Refixed/cleo/DrivebySettings.ini", "section": "MAIN", "key": "DrivebyAimButton", "value": "RMB", "required": true },
+    { "path": "modloader/Controls - Manual DriveBy Refixed/cleo/DrivebySettings.ini", "section": "MAIN", "key": "NoDrivingWhileAiming", "value": "0", "required": true },
+    { "path": "modloader/Controls - Manual DriveBy Refixed/cleo/DrivebySettings.ini", "section": "MAIN", "key": "FreeLineOfSight", "value": "1", "required": true },
+    { "path": "modloader/Controls - Manual DriveBy Refixed/cleo/DrivebySettings.ini", "section": "MAIN", "key": "NoAngleLimit", "value": "1", "required": true },
+    { "path": "modloader/Controls - Manual DriveBy Refixed/cleo/DrivebySettings.ini", "section": "EXCEPTIONS", "key": "DisableOnMission", "value": "0", "required": true },
+    { "path": "modloader/_CORE - Framerate Vigilante/FramerateVigilante.ini", "section": "Settings", "key": "FPSlimit", "value": "60", "required": true },
+    { "path": "modloader/_CORE - Framerate Vigilante/FramerateVigilante.ini", "section": "Settings", "key": "RefreshRate", "value": "60", "required": true },
+    { "path": "modloader/_CORE - Framerate Vigilante/FramerateVigilante.ini", "section": "Settings", "key": "AutoLimitFPS", "value": "1", "required": true },
+    { "path": "modloader/Graphics - SkyGfx 4.2b/skygfx1.ini", "section": "SkyGfx", "key": "buildingPipe", "value": "PS2", "required": true },
+    { "path": "modloader/Graphics - SkyGfx 4.2b/skygfx1.ini", "section": "SkyGfx", "key": "vehiclePipe", "value": "PS2", "required": true },
+    { "path": "modloader/Gameplay - GTA V Essentials/GTAVEssentials.ini", "section": "Controls", "key": "Enabled", "value": "1", "required": true },
+    { "path": "modloader/Gameplay - GTA V Essentials/GTAVEssentials.ini", "section": "Controls", "key": "R3LookBehind", "value": "1", "required": true },
+    { "path": "modloader/Gameplay - GTA V Essentials/GTAVEssentials.ini", "section": "Compatibility", "key": "ForceFrameLimiter", "value": "1", "required": true }
   ],
   "forbiddenModules": [
     "Graphics - Proper Shaders 05-26",
@@ -71,5 +168,6 @@
     "dxgi.dll",
     "d3d11.dll",
     "dinput8.dll"
-  ]
+  ],
+  "allowedOverlayConflicts": []
 }

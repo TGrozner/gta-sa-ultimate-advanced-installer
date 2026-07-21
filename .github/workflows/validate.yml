@@ -11,7 +11,31 @@ jobs:
   powershell:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v5
       - name: Static validation
         shell: pwsh
         run: ./tests/StaticValidation.ps1
+      - name: Transactional installer lifecycle
+        shell: pwsh
+        run: ./tests/InstallerLifecycle.ps1
+
+  native:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Preserve committed ASI
+        run: cp 'packages/gtav-essentials/overlay/modloader/Gameplay - GTA V Essentials/GTAVEssentials.asi' /tmp/GTAVEssentials.committed.asi
+      - name: Install 32-bit MinGW
+        run: sudo apt-get update && sudo apt-get install --yes g++-mingw-w64-i686
+      - name: Build GTAVEssentials
+        shell: pwsh
+        run: ./native/GTAVEssentials/build.ps1 -Compiler i686-w64-mingw32-g++
+      - name: Validate PE32 output
+        run: |
+          file 'packages/gtav-essentials/overlay/modloader/Gameplay - GTA V Essentials/GTAVEssentials.asi' | grep 'PE32 executable'
+          cmp /tmp/GTAVEssentials.committed.asi 'packages/gtav-essentials/overlay/modloader/Gameplay - GTA V Essentials/GTAVEssentials.asi'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GTAVEssentials-asi
+          path: packages/gtav-essentials/overlay/modloader/Gameplay - GTA V Essentials/GTAVEssentials.asi
+          if-no-files-found: error

@@ -20,9 +20,10 @@ New-Item -ItemType Directory -Path (Split-Path -Parent $output) -Force | Out-Nul
     '-shared',
     '-static-libgcc',
     '-static-libstdc++',
-    '-Wl,--kill-at',
+    '-Wl,--kill-at,--no-insert-timestamp',
     '-s',
     (Join-Path $PSScriptRoot 'GTAVEssentials.cpp'),
+    '-ladvapi32',
     '-o',
     $output
 )
