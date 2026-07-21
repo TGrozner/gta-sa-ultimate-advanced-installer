@@ -79,20 +79,28 @@ Press **F8** at any time to terminate a frozen `gta_sa.exe` process.
 ## Important controls
 
 - on foot: `LT` aims, `RT` fires, `A` sprints, `X` jumps, `B` reloads/melees and `Y` enters;
-- vehicles: `RT` accelerates, `LT` brakes/reverses, `RB` is the handbrake and `R3` looks behind;
-- controller drive-by: hold `LB`, aim freely with the right stick and press `RB` to shoot;
+- vehicles: `RT` accelerates, `LT` brakes/reverses, `RB` is the handbrake (including the motorcycle rear brake) and `R3` looks behind;
+- controller drive-by: hold `LB`, aim freely with the right stick and press `RB` to shoot; GInput's
+  lateral `LB`/`RB` camera bindings are disabled so those buttons remain dedicated to aiming and firing;
 - keyboard/mouse drive-by: right mouse button aims;
 - type `MDRRELOAD` during gameplay after editing drive-by settings;
 - SkyGfx preset 1 uses PS2 building and vehicle pipelines;
-- engine frame limit: 60 FPS.
+- engine frame limiter is kept enabled at 60 FPS, which preserves gym, swimming,
+  driving-school and physics behavior.
 
 ## Autosave
 
-`GTA V Essentials` saves automatically to slot 7 five seconds after a mission
-is completed. Slot 8 is left alone because SaveLoader can reserve it for GTASnP
-uploads. If slot 7 already contains a save that the module did not create,
-autosave disables itself instead of overwriting it. Diagnostics are written to
-`modloader\Gameplay - GTA V Essentials\GTAVEssentials.log`.
+`GTA V Essentials` schedules an automatic save to slot 7 five seconds after a
+mission is completed. It then waits until the mission thread and cutscene have
+fully ended, CJ is on foot, no gang war is running, the menu is closed and
+player controls have stayed available for ten continuous seconds. A completed
+autosave is validated before it replaces the previous slot, and its resume
+location is copied from the most recently used manual safehouse save. The
+matching CLEO state is saved with slot 7 as well. Slot
+8 is left alone because SaveLoader can reserve it for GTASnP uploads. If slot 7
+already contains a save that the module did not create, autosave disables itself
+instead of overwriting it. Diagnostics are written to `modloader\Gameplay - GTA
+V Essentials\GTAVEssentials.log`, with a fallback log in the game root.
 
 The bundled ASI is built from the MIT-licensed source in
 `native\GTAVEssentials`; no third-party binary is embedded in that package.
