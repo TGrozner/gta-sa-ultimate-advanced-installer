@@ -24,9 +24,9 @@ if (@($profile.supportedExecutableHashes | Where-Object { $_ -notmatch '^[A-Fa-f
 }
 
 $duplicateIds = @($mods.packages | Group-Object id | Where-Object Count -gt 1)
-if ($duplicateIds.Count -gt 0) { throw "Duplicate package IDs: $($duplicateIds.Name -join ', ')" }
+if (@($duplicateIds).Count -gt 0) { throw "Duplicate package IDs: $($duplicateIds.Name -join ', ')" }
 $duplicateModules = @($mods.packages | ForEach-Object { $_.targetModules } | Group-Object | Where-Object Count -gt 1)
-if ($duplicateModules.Count -gt 0) { throw "Modules have multiple package owners: $($duplicateModules.Name -join ', ')" }
+if (@($duplicateModules).Count -gt 0) { throw "Modules have multiple package owners: $($duplicateModules.Name -join ', ')" }
 
 $packageById = @{}
 $moduleOwners = @{}
@@ -44,7 +44,7 @@ foreach ($package in $mods.packages) {
     }
     $targetModules = if ($package.PSObject.Properties.Name -contains 'targetModules') { @($package.targetModules) } else { @() }
     $rootFiles = if ($package.PSObject.Properties.Name -contains 'rootFiles') { @($package.rootFiles) } else { @() }
-    if ($targetModules.Count -eq 0 -and $rootFiles.Count -eq 0) {
+    if (@($targetModules).Count -eq 0 -and @($rootFiles).Count -eq 0) {
         throw "Package '$($package.id)' declares no install target."
     }
     foreach ($module in $targetModules) { $moduleOwners[$module] = $package.id }
@@ -92,7 +92,7 @@ foreach ($rule in @($profile.compatibilityRules)) {
 $duplicateSettings = @($profile.configuration |
     Group-Object { "$($_.path)|$($_.section)|$($_.key)".ToLowerInvariant() } |
     Where-Object Count -gt 1)
-if ($duplicateSettings.Count -gt 0) { throw "Duplicate configuration keys: $($duplicateSettings.Name -join ', ')" }
+if (@($duplicateSettings).Count -gt 0) { throw "Duplicate configuration keys: $($duplicateSettings.Name -join ', ')" }
 
 $lockedIds = @{}
 foreach ($lockedPackage in $lock.packages) {
@@ -148,4 +148,4 @@ if (-not (Test-Path -LiteralPath (Join-Path $root 'Restore-Installation.ps1') -P
     throw 'Restore-Installation.ps1 is missing.'
 }
 
-Write-Host "Static validation passed: $($mods.packages.Count) sources, $($profile.requiredModules.Count) required modules, $($lock.packages.Count) locked overlays." -ForegroundColor Green
+Write-Host "Static validation passed: $(@($mods.packages).Count) sources, $(@($profile.requiredModules).Count) required modules, $(@($lock.packages).Count) locked overlays." -ForegroundColor Green
