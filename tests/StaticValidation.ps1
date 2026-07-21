@@ -41,6 +41,45 @@ if (-not (Test-Path -LiteralPath $essentialsBinary -PathType Leaf)) {
 if (-not (Test-Path -LiteralPath $essentialsSource -PathType Leaf)) {
     throw 'GTAVEssentials source is missing.'
 }
+$essentialsSourceText = Get-Content -Raw -LiteralPath $essentialsSource
+$requiredAutosaveGuards = @(
+    'kIsPlayerOnMissionAddress',
+    'kFindPlayerPedAddress',
+    'kFindPlayerVehicleAddress',
+    'kActiveScriptsAddress',
+    'kGangWarStateAddress',
+    'kCutsceneRunningAddress',
+    'kMenuActiveAddress',
+    'kPad0DisableControlsAddress',
+    'kSelectedSaveGameAddress',
+    'kSaveBypassAddress',
+    'kRuntimeAutosaveSupported',
+    'kFrameLimiterEnabledAddress',
+    'g_autosaveSafeWindowMs',
+    'FindLatestSafehouseLocation',
+    'WriteValidatedAutosave',
+    'RestorePreviousAutosave'
+)
+$missingAutosaveGuards = $requiredAutosaveGuards | Where-Object { $essentialsSourceText -notmatch [regex]::Escape($_) }
+if ($missingAutosaveGuards) {
+    throw "GTAVEssentials autosave safety guards are missing: $($missingAutosaveGuards -join ', ')"
+}
+$requiredBikeHandBrakeGuards = @(
+    'kGetBrakeAddress',
+    'kBikeProcessControlInputsStart',
+    'kBikeProcessControlInputsEnd',
+    'BrakeHook',
+    'InstallBrakeHook',
+    'kGetLookLeftAddress',
+    'kGetLookRightAddress',
+    'LookLeftHook',
+    'LookRightHook',
+    'InstallSideLookHook'
+)
+$missingBikeHandBrakeGuards = $requiredBikeHandBrakeGuards | Where-Object { $essentialsSourceText -notmatch [regex]::Escape($_) }
+if ($missingBikeHandBrakeGuards) {
+    throw "GTAVEssentials bike handbrake guards are missing: $($missingBikeHandBrakeGuards -join ', ')"
+}
 $binaryBytes = [System.IO.File]::ReadAllBytes($essentialsBinary)
 if ($binaryBytes.Length -lt 1024 -or $binaryBytes[0] -ne 0x4D -or $binaryBytes[1] -ne 0x5A) {
     throw 'Bundled GTAVEssentials.asi is not a valid PE binary.'
