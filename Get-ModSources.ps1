@@ -41,6 +41,9 @@ foreach ($package in $selectedPackages) {
             'Extract installable files under overlay, preserving paths relative to the GTA SA game root.'
             'Never commit downloaded archives or third-party assets to this repository.'
         )
+        if ($package.PSObject.Properties.Name -contains 'notes' -and $package.notes) {
+            $instructions += @('', "Profile notes: $($package.notes)")
+        }
         [System.IO.File]::WriteAllLines((Join-Path $packagePath 'README.txt'), $instructions, [System.Text.UTF8Encoding]::new($false))
     }
 

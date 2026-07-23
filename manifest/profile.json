@@ -5,9 +5,14 @@
     "B1BAE961837F9828FB1920369390A116F5FA6BA82C547CD1DA8F2C495967ADCD"
   ],
   "requiredRootFiles": [
+    "$fastman92limitAdjuster.asi",
     "CLEO.asi",
+    "DllTricks.dll",
+    "fastman92limitAdjuster_GTASA.ini",
+    "MinHook.x86.dll",
     "modloader.asi",
-    "vorbisFile.dll"
+    "vorbisFile.dll",
+    "zlib1.dll"
   ],
   "requiredModules": [
     "_CORE - Framerate Vigilante",
@@ -28,9 +33,7 @@
     "Gameplay - Reload Mod Fixed",
     "Gameplay - GTA V Essentials",
     "Graphics - Project2DFX",
-    "Graphics - RoSA Core HD",
-    "Graphics - RoSA Cutscenes HD",
-    "Graphics - RoSA Interiors HD",
+    "Graphics - RoSA Evolved May 2026",
     "Graphics - SkyGfx 4.2b",
     "Handling V to SA",
     "Mega - AI Upscaled Weapon Textures and Icons",
@@ -62,6 +65,9 @@
     "World - Project Props Procobj Override"
   ],
   "forbiddenModules": [
+    "Graphics - RoSA Core HD",
+    "Graphics - RoSA Cutscenes HD",
+    "Graphics - RoSA Interiors HD",
     "Graphics - Proper Shaders 05-26",
     "ImVehFt",
     "Wheel Detach"
@@ -71,5 +77,25 @@
     "dxgi.dll",
     "d3d11.dll",
     "dinput8.dll"
-  ]
+  ],
+  "forbiddenActiveFiles": [
+    "ImgLimitAdjuster.asi",
+    "SimpleLimitAdjuster_IMGfiles.asi"
+  ],
+  "requiredRootFileHashes": {
+    "$fastman92limitAdjuster.asi": "323F552C167AD705310118B5FCCE91D3AF4004016C11112A1A83CF4711C908ED",
+    "DllTricks.dll": "C0B0233DC7FD149E03B8AA70A5797430E06E4799A88E741632E03338882F9C40",
+    "MinHook.x86.dll": "1524FEDC94DE76295196F1EFAA9380A77F743551FE51BCF942C14BE32519D585",
+    "zlib1.dll": "42967A768F341D9CE5174EB38A4D63754C3C41739E7D88F4E39CD7354C1FAC71"
+  },
+  "rosaValidation": {
+    "module": "Graphics - RoSA Evolved May 2026",
+    "minimumBytes": 10737418240,
+    "minimumImgArchives": 9,
+    "requiredSegments": [
+      "Exterior",
+      "Cutscene",
+      "Interior"
+    ]
+  }
 }

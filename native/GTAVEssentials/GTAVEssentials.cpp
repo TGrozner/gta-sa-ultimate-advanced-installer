@@ -419,27 +419,12 @@ void ConfigureAutosaveProtection(const char* saveDirectory) {
     }
 }
 
-bool ControllerButtonIsDown(WORD button) {
-    if (!g_controlsEnabled || g_xinputGetState == nullptr) {
-        return false;
-    }
-    XINPUT_STATE state{};
-    return g_xinputGetState(0, &state) == ERROR_SUCCESS
-        && (state.Gamepad.wButtons & button) != 0;
+bool __attribute__((fastcall)) LookLeftHook(void*, void*) {
+    return false;
 }
 
-bool __attribute__((fastcall)) LookLeftHook(void* pad, void*) {
-    if (pad != nullptr && ControllerButtonIsDown(XINPUT_GAMEPAD_LEFT_SHOULDER)) {
-        return false;
-    }
-    return g_originalLookLeft != nullptr && g_originalLookLeft(pad);
-}
-
-bool __attribute__((fastcall)) LookRightHook(void* pad, void*) {
-    if (pad != nullptr && ControllerButtonIsDown(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
-        return false;
-    }
-    return g_originalLookRight != nullptr && g_originalLookRight(pad);
+bool __attribute__((fastcall)) LookRightHook(void*, void*) {
+    return false;
 }
 
 struct SafehouseLocation {
@@ -925,7 +910,7 @@ bool InstallSideLookHook(
         Log("ERROR controls hook=%s outcome=failed", operation);
         return false;
     }
-    Log("INFO controls hook=%s controller=blocked keyboard=preserved outcome=installed", operation);
+    Log("INFO controls hook=%s action=disabled outcome=installed", operation);
     return true;
 }
 

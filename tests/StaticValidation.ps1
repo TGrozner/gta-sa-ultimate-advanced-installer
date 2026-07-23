@@ -18,6 +18,33 @@ if ($duplicateIds) { throw "Duplicate package IDs: $($duplicateIds.Name -join ',
 $invalidUrls = $mods.packages | Where-Object { $_.sourceUrl -notmatch '^https://' }
 if ($invalidUrls) { throw "Non-HTTPS source URLs: $($invalidUrls.id -join ', ')" }
 
+$rosaPackage = $mods.packages | Where-Object id -eq 'rosa'
+$flaPackage = $mods.packages | Where-Object id -eq 'fastman92-limit-adjuster'
+if ($null -eq $rosaPackage -or $rosaPackage.targetModules -notcontains $profile.rosaValidation.module) {
+    throw 'RoSA manifest target does not match the full validated module.'
+}
+if ($null -eq $flaPackage -or $flaPackage.version -ne '7.6' -or $flaPackage.requiredRuntimeFiles.Count -ne 4) {
+    throw 'fastman92 Limit Adjuster 7.6 runtime contract is incomplete.'
+}
+$requiredForbiddenAdjusters = @('ImgLimitAdjuster.asi', 'SimpleLimitAdjuster_IMGfiles.asi')
+$missingForbiddenAdjusters = $requiredForbiddenAdjusters |
+    Where-Object { $_ -notin $profile.forbiddenActiveFiles }
+if ($missingForbiddenAdjusters) {
+    throw "Incompatible RoSA limit adjusters are not forbidden: $($missingForbiddenAdjusters -join ', ')"
+}
+$flaConfig = Join-Path $root 'config\fastman92limitAdjuster_GTASA.ini'
+$flaConfigText = Get-Content -Raw -LiteralPath $flaConfig
+$requiredFlaConfig = @(
+    'Enable handling of new enhanced IMG archives = 0',
+    'Max number of IMG archives = 64',
+    'Increase the IMG archive size limit = 1'
+)
+$missingFlaConfig = $requiredFlaConfig |
+    Where-Object { $flaConfigText -notmatch [regex]::Escape($_) }
+if ($missingFlaConfig) {
+    throw "RoSA fastman92 configuration is incomplete: $($missingFlaConfig -join ', ')"
+}
+
 $tokens = $null
 $errors = $null
 foreach ($script in Get-ChildItem -LiteralPath $root -Recurse -File -Filter '*.ps1') {
@@ -79,6 +106,16 @@ $requiredBikeHandBrakeGuards = @(
 $missingBikeHandBrakeGuards = $requiredBikeHandBrakeGuards | Where-Object { $essentialsSourceText -notmatch [regex]::Escape($_) }
 if ($missingBikeHandBrakeGuards) {
     throw "GTAVEssentials bike handbrake guards are missing: $($missingBikeHandBrakeGuards -join ', ')"
+}
+$disabledSideLookHooks = @(
+    'bool __attribute__((fastcall)) LookLeftHook(void*, void*)',
+    'bool __attribute__((fastcall)) LookRightHook(void*, void*)',
+    'controls hook=%s action=disabled outcome=installed'
+)
+$missingDisabledSideLookHooks = $disabledSideLookHooks |
+    Where-Object { $essentialsSourceText -notmatch [regex]::Escape($_) }
+if ($missingDisabledSideLookHooks) {
+    throw "GTAVEssentials side-look actions are not hard-disabled: $($missingDisabledSideLookHooks -join ', ')"
 }
 $binaryBytes = [System.IO.File]::ReadAllBytes($essentialsBinary)
 if ($binaryBytes.Length -lt 1024 -or $binaryBytes[0] -ne 0x4D -or $binaryBytes[1] -ne 0x5A) {
