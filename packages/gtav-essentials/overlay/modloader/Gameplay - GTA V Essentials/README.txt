@@ -5,6 +5,7 @@ Controller:
 - RB is the vehicle handbrake and applies motorcycle rear-brake pressure.
 - R3 looks behind while driving.
 - Hold LB to aim freely from a vehicle; while LB is held, RB fires instead of braking.
+- Vehicle look-left/look-right actions are disabled so LB and RB cannot rotate the camera.
 - Keyboard handbrake remains available.
 
 Compatibility:

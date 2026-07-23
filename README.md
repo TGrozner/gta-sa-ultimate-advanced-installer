@@ -8,13 +8,17 @@ The validated renderer is **SkyGfx 4.2b + SkyGrad**. Proper Shaders 05-26 is
 intentionally excluded because it caused intermittent freezes during save and
 new-game loading after a cold restart.
 
+The validated texture package is the complete **RoSA Project Evolved May 2026**
+HD/4K build: Exterior, Cutscene and Interior remain together in one Mod Loader
+module. The profile does not use a reduced or texture-stripped variant.
+
 ## What this repository does
 
 - lists every original mod source and expected module;
 - prepares a package workspace with the correct target folders;
 - installs package overlays into a legal GTA SA copy with a timestamped backup;
 - applies the validated 60 FPS and complete GTA V-style Xbox control profile;
-- installs a protected automatic save five seconds after successful missions;
+- keeps unsafe runtime autosave disabled and preserves normal safehouse saves;
 - installs a global F8 emergency kill switch and launcher;
 - detects missing modules, duplicate renderers and known crash combinations.
 
@@ -54,6 +58,21 @@ packages/
           skygfx.asi
           skygfx1.ini
 ```
+
+For RoSA, keep the complete monthly package under:
+
+```text
+packages/rosa/overlay/modloader/Graphics - RoSA Evolved May 2026/
+```
+
+Do not split or remove Exterior, Cutscene or Interior. Omit the incompatible
+`ImgLimitAdjuster.asi` and `SimpleLimitAdjuster_IMGfiles.asi` files.
+
+For fastman92 Limit Adjuster 7.6, place only the WIN_X86 runtime files in
+`packages/fastman92-limit-adjuster/overlay/`: `$fastman92limitAdjuster.asi`,
+`DllTricks.dll`, `MinHook.x86.dll` and `zlib1.dll`. The installer supplies the
+validated INI and moves either incompatible RoSA adjuster into the timestamped
+backup if one is still active.
 
 Preview the installation without writing:
 
@@ -109,6 +128,10 @@ Git and must not be pushed.
 The installer copies only overlays that exist. It reports absent packages, then
 the verifier tells you exactly which modules are still missing. This makes it
 possible to build the profile in several passes without losing existing work.
+
+RoSA and fastman92 remain third-party downloads and are never committed. The
+verifier requires the full RoSA payload (at least 10 GB and nine IMG archives)
+and the exact validated fastman92 7.6 WIN_X86 runtime hashes.
 
 ## Safety and rollback
 

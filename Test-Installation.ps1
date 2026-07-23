@@ -28,12 +28,48 @@ foreach ($file in $profile.requiredRootFiles) {
     }
 }
 
+foreach ($property in $profile.requiredRootFileHashes.PSObject.Properties) {
+    $path = Join-Path $game $property.Name
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { continue }
+    $actualHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash
+    if ($actualHash -eq $property.Value) {
+        $passes.Add("Root dependency hash valid: $($property.Name)")
+    } else {
+        $issues.Add("Root dependency hash mismatch: $($property.Name), expected '$($property.Value)', got '$actualHash'")
+    }
+}
+
 $modloader = Join-Path $game 'modloader'
 foreach ($module in $profile.requiredModules) {
     if (Test-Path -LiteralPath (Join-Path $modloader $module) -PathType Container) {
         $passes.Add("Module present: $module")
     } else {
         $issues.Add("Missing module: $module")
+    }
+}
+
+$rosaRoot = Join-Path $modloader $profile.rosaValidation.module
+if (Test-Path -LiteralPath $rosaRoot -PathType Container) {
+    $rosaFiles = @(Get-ChildItem -LiteralPath $rosaRoot -Recurse -File)
+    $rosaBytes = [int64](($rosaFiles | Measure-Object Length -Sum).Sum)
+    $rosaImages = @($rosaFiles | Where-Object Extension -eq '.img')
+    if ($rosaBytes -ge [int64]$profile.rosaValidation.minimumBytes) {
+        $passes.Add("Full RoSA payload present: $([math]::Round($rosaBytes / 1GB, 2)) GB")
+    } else {
+        $issues.Add("RoSA payload is incomplete: $([math]::Round($rosaBytes / 1GB, 2)) GB, expected at least $([math]::Round([int64]$profile.rosaValidation.minimumBytes / 1GB, 2)) GB")
+    }
+    if ($rosaImages.Count -ge [int]$profile.rosaValidation.minimumImgArchives) {
+        $passes.Add("Full RoSA IMG set present: $($rosaImages.Count) archives")
+    } else {
+        $issues.Add("RoSA IMG set is incomplete: $($rosaImages.Count), expected at least $($profile.rosaValidation.minimumImgArchives)")
+    }
+    foreach ($segment in $profile.rosaValidation.requiredSegments) {
+        $segmentPresent = $rosaFiles | Where-Object FullName -like "*$segment*" | Select-Object -First 1
+        if ($segmentPresent) {
+            $passes.Add("RoSA segment present: $segment")
+        } else {
+            $issues.Add("RoSA segment missing: $segment")
+        }
     }
 }
 
@@ -46,6 +82,21 @@ foreach ($module in $profile.forbiddenModules) {
 foreach ($file in $profile.forbiddenRootFiles) {
     if (Test-Path -LiteralPath (Join-Path $game $file) -PathType Leaf) {
         $issues.Add("Forbidden root wrapper: $file")
+    }
+}
+
+foreach ($fileName in $profile.forbiddenActiveFiles) {
+    $matches = [System.Collections.Generic.List[System.IO.FileInfo]]::new()
+    $rootFile = Join-Path $game $fileName
+    if (Test-Path -LiteralPath $rootFile -PathType Leaf) {
+        $matches.Add((Get-Item -LiteralPath $rootFile))
+    }
+    if (Test-Path -LiteralPath $modloader -PathType Container) {
+        Get-ChildItem -LiteralPath $modloader -Recurse -File -Filter $fileName |
+            ForEach-Object { $matches.Add($_) }
+    }
+    foreach ($match in $matches) {
+        $issues.Add("Incompatible limit adjuster active: $($match.FullName)")
     }
 }
 
@@ -64,8 +115,18 @@ $expectedSettings = @(
     @{ Path = 'modloader\Gameplay - GTA V Essentials\GTAVEssentials.ini'; Section = 'Autosave'; Key = 'Slot'; Value = '7' },
     @{ Path = 'modloader\Gameplay - GTA V Essentials\GTAVEssentials.ini'; Section = 'Autosave'; Key = 'SafeWindowMs'; Value = '10000' },
     @{ Path = 'modloader\modloader.ini'; Section = 'Profiles.Advanced2026.Priority'; Key = 'Gameplay - GTA V Essentials'; Value = '95' },
+    @{ Path = 'modloader\modloader.ini'; Section = 'Profiles.Advanced2026.Priority'; Key = 'Fixes - Proper Fixes 2026'; Value = '90' },
+    @{ Path = 'modloader\modloader.ini'; Section = 'Profiles.Advanced2026.Priority'; Key = 'Graphics - RoSA Evolved May 2026'; Value = '50' },
+    @{ Path = 'modloader\_CORE - Open Limit Adjuster\III.VC.SA.LimitAdjuster.ini'; Section = 'SALIMITS'; Key = 'MemoryAvailable'; Value = '1024' },
+    @{ Path = 'modloader\_CORE - Improved Streaming\ImprovedStreaming.ini'; Section = 'Settings'; Key = 'StreamMemoryForced'; Value = '1024' },
+    @{ Path = 'modloader\_CORE - Improved Streaming\ImprovedStreaming.ini'; Section = 'Settings'; Key = 'DoubleStreamingMemoryLimit'; Value = '0' },
+    @{ Path = 'modloader\_CORE - Improved Streaming\ImprovedStreaming.ini'; Section = 'Settings'; Key = 'MaxRAM'; Value = '3100' },
     @{ Path = 'modloader\_CORE - Framerate Vigilante\FramerateVigilante.ini'; Section = 'Settings'; Key = 'FPSlimit'; Value = '60' },
-    @{ Path = 'modloader\Graphics - SkyGfx 4.2b\skygfx1.ini'; Section = 'SkyGfx'; Key = 'buildingPipe'; Value = 'PS2' }
+    @{ Path = 'modloader\Graphics - SkyGfx 4.2b\skygfx1.ini'; Section = 'SkyGfx'; Key = 'buildingPipe'; Value = 'PS2' },
+    @{ Path = 'fastman92limitAdjuster_GTASA.ini'; Section = 'MAIN'; Key = 'Disable FLA loading text'; Value = '1' },
+    @{ Path = 'fastman92limitAdjuster_GTASA.ini'; Section = 'IMG LIMITS'; Key = 'Enable handling of new enhanced IMG archives'; Value = '0' },
+    @{ Path = 'fastman92limitAdjuster_GTASA.ini'; Section = 'IMG LIMITS'; Key = 'Max number of IMG archives'; Value = '64' },
+    @{ Path = 'fastman92limitAdjuster_GTASA.ini'; Section = 'IMG LIMITS'; Key = 'Increase the IMG archive size limit'; Value = '1' }
 )
 
 foreach ($setting in $expectedSettings) {

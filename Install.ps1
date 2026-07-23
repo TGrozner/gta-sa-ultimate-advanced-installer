@@ -26,6 +26,7 @@ $timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
 $backupRoot = Join-Path $game "_installer-backups\$timestamp"
 $installedFiles = 0
 $preparedPackages = 0
+$disabledIncompatibleFiles = 0
 
 if (Test-Path -LiteralPath $PackageRoot -PathType Container) {
     foreach ($package in Get-ChildItem -LiteralPath $PackageRoot -Directory) {
@@ -55,7 +56,33 @@ if (Test-Path -LiteralPath $PackageRoot -PathType Container) {
     }
 }
 
+$modloaderRoot = Join-Path $game 'modloader'
+$incompatibleFiles = [System.Collections.Generic.List[System.IO.FileInfo]]::new()
+foreach ($fileName in $profile.forbiddenActiveFiles) {
+    $rootFile = Join-Path $game $fileName
+    if (Test-Path -LiteralPath $rootFile -PathType Leaf) {
+        $incompatibleFiles.Add((Get-Item -LiteralPath $rootFile))
+    }
+    if (Test-Path -LiteralPath $modloaderRoot -PathType Container) {
+        Get-ChildItem -LiteralPath $modloaderRoot -Recurse -File -Filter $fileName |
+            ForEach-Object { $incompatibleFiles.Add($_) }
+    }
+}
+
+foreach ($file in $incompatibleFiles) {
+    $relative = [System.IO.Path]::GetRelativePath($game, $file.FullName)
+    $backup = Assert-ChildPath -Parent $backupRoot -Child (
+        Join-Path $backupRoot (Join-Path 'disabled-incompatible' $relative)
+    )
+    if ($PSCmdlet.ShouldProcess($file.FullName, "Move incompatible limit adjuster to $backup")) {
+        New-Item -ItemType Directory -Path (Split-Path -Parent $backup) -Force | Out-Null
+        Move-Item -LiteralPath $file.FullName -Destination $backup
+        $disabledIncompatibleFiles++
+    }
+}
+
 $ownedFiles = @(
+    @{ Source = Join-Path $PSScriptRoot 'config\fastman92limitAdjuster_GTASA.ini'; Destination = Join-Path $game 'fastman92limitAdjuster_GTASA.ini' },
     @{ Source = Join-Path $PSScriptRoot 'scripts\gta-f8-kill-switch.ps1'; Destination = Join-Path $game 'Tools\gta-f8-kill-switch.ps1' },
     @{ Source = Join-Path $PSScriptRoot 'scripts\Game-Launcher.ps1'; Destination = Join-Path $game 'Launch GTA SA 2026.ps1' }
 )
@@ -80,11 +107,20 @@ $settings = @(
     @{ Path = 'modloader\Controls - Manual DriveBy Refixed\cleo\DrivebySettings.ini'; Section = 'MAIN'; Key = 'NoAngleLimit'; Value = '1' },
     @{ Path = 'modloader\Controls - Manual DriveBy Refixed\cleo\DrivebySettings.ini'; Section = 'EXCEPTIONS'; Key = 'DisableOnMission'; Value = '0' },
     @{ Path = 'modloader\modloader.ini'; Section = 'Profiles.Advanced2026.Priority'; Key = 'Gameplay - GTA V Essentials'; Value = '95' },
+    @{ Path = 'modloader\modloader.ini'; Section = 'Profiles.Advanced2026.Priority'; Key = 'Fixes - Proper Fixes 2026'; Value = '90' },
+    @{ Path = 'modloader\modloader.ini'; Section = 'Profiles.Advanced2026.Priority'; Key = 'Graphics - RoSA Evolved May 2026'; Value = '50' },
+    @{ Path = 'modloader\_CORE - Open Limit Adjuster\III.VC.SA.LimitAdjuster.ini'; Section = 'SALIMITS'; Key = 'MemoryAvailable'; Value = '1024' },
+    @{ Path = 'modloader\_CORE - Improved Streaming\ImprovedStreaming.ini'; Section = 'Settings'; Key = 'StreamMemoryForced'; Value = '1024' },
+    @{ Path = 'modloader\_CORE - Improved Streaming\ImprovedStreaming.ini'; Section = 'Settings'; Key = 'DoubleStreamingMemoryLimit'; Value = '0' },
+    @{ Path = 'modloader\_CORE - Improved Streaming\ImprovedStreaming.ini'; Section = 'Settings'; Key = 'MaxRAM'; Value = '3100' },
     @{ Path = 'modloader\_CORE - Framerate Vigilante\FramerateVigilante.ini'; Section = 'Settings'; Key = 'FPSlimit'; Value = '60' },
     @{ Path = 'modloader\_CORE - Framerate Vigilante\FramerateVigilante.ini'; Section = 'Settings'; Key = 'RefreshRate'; Value = '60' },
     @{ Path = 'modloader\_CORE - Framerate Vigilante\FramerateVigilante.ini'; Section = 'Settings'; Key = 'AutoLimitFPS'; Value = '1' },
     @{ Path = 'modloader\Graphics - SkyGfx 4.2b\skygfx1.ini'; Section = 'SkyGfx'; Key = 'buildingPipe'; Value = 'PS2' },
-    @{ Path = 'modloader\Graphics - SkyGfx 4.2b\skygfx1.ini'; Section = 'SkyGfx'; Key = 'vehiclePipe'; Value = 'PS2' }
+    @{ Path = 'modloader\Graphics - SkyGfx 4.2b\skygfx1.ini'; Section = 'SkyGfx'; Key = 'vehiclePipe'; Value = 'PS2' },
+    @{ Path = 'fastman92limitAdjuster_GTASA.ini'; Section = 'IMG LIMITS'; Key = 'Enable handling of new enhanced IMG archives'; Value = '0' },
+    @{ Path = 'fastman92limitAdjuster_GTASA.ini'; Section = 'IMG LIMITS'; Key = 'Max number of IMG archives'; Value = '64' },
+    @{ Path = 'fastman92limitAdjuster_GTASA.ini'; Section = 'IMG LIMITS'; Key = 'Increase the IMG archive size limit'; Value = '1' }
 )
 
 $configuredFiles = 0
@@ -107,6 +143,7 @@ foreach ($setting in $settings) {
     ExecutableHash = $executableHash
     PreparedPackages = $preparedPackages
     InstalledFiles = $installedFiles
+    DisabledIncompatibleFiles = $disabledIncompatibleFiles
     ConfiguredSettings = $configuredFiles
     BackupRoot = if (Test-Path -LiteralPath $backupRoot) { $backupRoot } else { $null }
 }

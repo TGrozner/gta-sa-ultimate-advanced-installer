@@ -13,6 +13,19 @@
 One successful launch is not sufficient: Proper Shaders passed once and failed
 again on the following cold launch in the reference build.
 
+### Full bar with RoSA Evolved
+
+The validated GTA SA executable is the 5,189,632-byte 1.0 US Compact build.
+RoSA's legacy `ImgLimitAdjuster.asi` and replacement
+`SimpleLimitAdjuster_IMGfiles.asi` both crashed that executable during the
+reference diagnosis. Do not leave either file active.
+
+Use fastman92 Limit Adjuster 7.6 with the repository INI instead. It raises the
+IMG archive count to 64 and the archive-size limit to 32 GB without enabling
+the enhanced-IMG hook that conflicted with Mod Loader. Keep Open Limit Adjuster
+and Improved Streaming at 1024 MB. `Test-Installation.ps1` checks the binaries,
+settings, incompatible adjusters and the complete RoSA payload.
+
 ## Proper Fixes warning
 
 Proper Fixes requires a compatible building/map pipeline. The validated profile
